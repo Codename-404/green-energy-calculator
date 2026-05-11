@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { coordinatesSchema } from "@/lib/validators";
 import { getCached, setCache, cacheKey } from "../middleware/cache";
+import { fetchUpstream } from "../lib/upstream";
 import { NASA_PARAMS, MONTH_KEYS } from "@/lib/constants";
 import type { NasaPowerResponse, SolarIrradianceData } from "@/types/api";
 
@@ -23,12 +24,12 @@ solar.get("/", zValidator("query", coordinatesSchema), async (c) => {
   const params = NASA_PARAMS.join(",");
   const url = `https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=${params}&community=RE&longitude=${lon}&latitude=${lat}&format=JSON`;
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    return c.json({ error: "Failed to fetch solar data from NASA POWER" }, 502);
+  const result = await fetchUpstream<NasaPowerResponse>(url, "NASA POWER");
+  if (!result.ok) {
+    return c.json({ error: result.message }, result.status);
   }
 
-  const raw: NasaPowerResponse = await response.json();
+  const raw = result.data;
   const p = raw.properties.parameter;
 
   // Normalize into our format

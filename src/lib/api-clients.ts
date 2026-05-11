@@ -1,36 +1,41 @@
 import type { SolarIrradianceData, WeatherResponse, GeocodeResult } from "@/types/api";
 
-export async function fetchSolarData(
+async function fetchJson<T>(url: string, fallbackMessage: string): Promise<T> {
+  const res = await fetch(url);
+  if (!res.ok) {
+    let serverMessage: string | undefined;
+    try {
+      const body = (await res.json()) as { error?: string };
+      serverMessage = body?.error;
+    } catch {
+      // body wasn't JSON — fall back to generic message
+    }
+    throw new Error(serverMessage ?? `${fallbackMessage} (HTTP ${res.status})`);
+  }
+  return (await res.json()) as T;
+}
+
+export function fetchSolarData(
   lat: number,
-  lon: number
+  lon: number,
 ): Promise<SolarIrradianceData> {
-  const res = await fetch(`/api/solar?lat=${lat}&lon=${lon}`);
-  if (!res.ok) throw new Error("Failed to fetch solar data");
-  return res.json();
+  return fetchJson(`/api/solar?lat=${lat}&lon=${lon}`, "Failed to fetch solar data");
 }
 
-export async function fetchWeather(
+export function fetchWeather(
   lat: number,
-  lon: number
+  lon: number,
 ): Promise<WeatherResponse> {
-  const res = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
-  if (!res.ok) throw new Error("Failed to fetch weather data");
-  return res.json();
+  return fetchJson(`/api/weather?lat=${lat}&lon=${lon}`, "Failed to fetch weather data");
 }
 
-export async function geocodeAddress(
-  query: string
-): Promise<GeocodeResult[]> {
-  const res = await fetch(`/api/geocode?q=${encodeURIComponent(query)}`);
-  if (!res.ok) throw new Error("Geocoding failed");
-  return res.json();
+export function geocodeAddress(query: string): Promise<GeocodeResult[]> {
+  return fetchJson(`/api/geocode?q=${encodeURIComponent(query)}`, "Geocoding failed");
 }
 
-export async function reverseGeocode(
+export function reverseGeocode(
   lat: number,
-  lon: number
+  lon: number,
 ): Promise<GeocodeResult[]> {
-  const res = await fetch(`/api/geocode?lat=${lat}&lon=${lon}`);
-  if (!res.ok) throw new Error("Reverse geocoding failed");
-  return res.json();
+  return fetchJson(`/api/geocode?lat=${lat}&lon=${lon}`, "Reverse geocoding failed");
 }

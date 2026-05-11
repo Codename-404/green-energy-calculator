@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { z } from "zod";
 import { getCached, setCache } from "../middleware/cache";
+import { fetchUpstream } from "../lib/upstream";
 import type { OpenMeteoGeocodeResult, GeocodeResult } from "@/types/api";
 
 const geocode = new Hono();
@@ -44,14 +45,15 @@ geocode.get("/", async (c) => {
     if (cached) return c.json(cached);
 
     const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(parsed.data.q)}&count=5&language=en&format=json`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      return c.json({ error: "Geocoding failed" }, 502);
+    const result = await fetchUpstream<{ results?: OpenMeteoGeocodeResult[] }>(
+      url,
+      "Open-Meteo geocoding",
+    );
+    if (!result.ok) {
+      return c.json({ error: result.message }, result.status);
     }
 
-    const raw = await response.json();
-    // Open-Meteo returns { results: [...] } or {} if no results
-    const results: GeocodeResult[] = (raw.results ?? []).map(normalize);
+    const results: GeocodeResult[] = (result.data.results ?? []).map(normalize);
     setCache(key, results);
     return c.json(results);
   }
@@ -71,9 +73,16 @@ geocode.get("/", async (c) => {
 
     // Use BigDataCloud free reverse geocoding (no API key needed, generous free tier)
     const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${parsed.data.lat}&longitude=${parsed.data.lon}&localityLanguage=en`;
-    const response = await fetch(url);
-    if (!response.ok) {
-      // Fallback: return coordinates as location name
+    type BdcResponse = {
+      locality?: string;
+      city?: string;
+      principalSubdivision?: string;
+      countryCode?: string;
+    };
+    const result = await fetchUpstream<BdcResponse>(url, "BigDataCloud reverse geocoding");
+    if (!result.ok) {
+      // Reverse-geocode is best-effort — fall back to bare coordinates
+      // rather than surfacing an error the user can't act on.
       const fallback: GeocodeResult[] = [{
         name: `${parsed.data.lat.toFixed(4)}, ${parsed.data.lon.toFixed(4)}`,
         lat: parsed.data.lat,
@@ -83,7 +92,7 @@ geocode.get("/", async (c) => {
       return c.json(fallback);
     }
 
-    const raw = await response.json();
+    const raw = result.data;
     const results: GeocodeResult[] = [{
       name: raw.locality || raw.city || raw.principalSubdivision || `${parsed.data.lat.toFixed(4)}, ${parsed.data.lon.toFixed(4)}`,
       lat: parsed.data.lat,

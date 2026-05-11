@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { coordinatesSchema } from "@/lib/validators";
 import { getCached, setCache, cacheKey } from "../middleware/cache";
+import { fetchUpstream } from "../lib/upstream";
 import type { OpenMeteoWeatherResponse, WeatherResponse } from "@/types/api";
 
 const weather = new Hono();
@@ -54,12 +55,12 @@ weather.get("/", zValidator("query", coordinatesSchema), async (c) => {
 
   const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=ms`;
 
-  const response = await fetch(url);
-  if (!response.ok) {
-    return c.json({ error: "Failed to fetch weather data" }, 502);
+  const result = await fetchUpstream<OpenMeteoWeatherResponse>(url, "Open-Meteo weather");
+  if (!result.ok) {
+    return c.json({ error: result.message }, result.status);
   }
 
-  const raw: OpenMeteoWeatherResponse = await response.json();
+  const raw = result.data;
 
   const data: WeatherResponse = {
     temperature: raw.current.temperature_2m,
