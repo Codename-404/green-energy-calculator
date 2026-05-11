@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useAtom, useSetAtom } from "jotai";
 import {
   locationAtom,
@@ -175,16 +175,10 @@ export function LocationInput() {
     }
   }, [gpsCoordinates, handleSelectResult, setLocation, fetchLocationData]);
 
-  // Trigger reverse geocode when GPS coordinates change
-  // Using a ref-based approach to avoid effect dependency issues
-  const [lastGps, setLastGps] = useState<string | null>(null);
-  const gpsKey = gpsCoordinates
-    ? `${gpsCoordinates.latitude},${gpsCoordinates.longitude}`
-    : null;
-  if (gpsKey && gpsKey !== lastGps) {
-    setLastGps(gpsKey);
+  useEffect(() => {
+    if (!gpsCoordinates) return;
     handleGpsResult();
-  }
+  }, [gpsCoordinates, handleGpsResult]);
 
   /** Handle clearing the selected location */
   const handleClear = useCallback(() => {
