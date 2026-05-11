@@ -32,34 +32,13 @@ import type {
   WindCalculationResult,
   EnvironmentalImpact,
 } from "@/types/calculations";
-import type { SolarPanel, Battery, WindTurbine, Inverter } from "@/types/equipment";
-
-// These will be populated with imported JSON data
-// Using dynamic imports to avoid issues with JSON imports in some configs
-let panelsData: SolarPanel[] = [];
-let batteriesData: Battery[] = [];
-let turbinesData: WindTurbine[] = [];
-let invertersData: Inverter[] = [];
-
-// Initialize equipment data
-export async function initEquipmentData() {
-  const [panels, batteries, turbines, inverters] = await Promise.all([
-    import("@/data/solar-panels.json").then((m) => m.default as unknown as SolarPanel[]),
-    import("@/data/batteries.json").then((m) => m.default as unknown as Battery[]),
-    import("@/data/wind-turbines.json").then((m) => m.default as unknown as WindTurbine[]),
-    import("@/data/inverters.json").then((m) => m.default as unknown as Inverter[]),
-  ]);
-  panelsData = panels;
-  batteriesData = batteries;
-  turbinesData = turbines;
-  invertersData = inverters;
-}
+import { panels, batteries, turbines, inverters } from "@/data";
 
 // Equipment lookup helpers
-export const allPanelsAtom = atom(() => panelsData);
-export const allBatteriesAtom = atom(() => batteriesData);
-export const allTurbinesAtom = atom(() => turbinesData);
-export const allInvertersAtom = atom(() => invertersData);
+export const allPanelsAtom = atom(() => panels);
+export const allBatteriesAtom = atom(() => batteries);
+export const allTurbinesAtom = atom(() => turbines);
+export const allInvertersAtom = atom(() => inverters);
 
 // Selected panel object (supports both technology and product modes)
 export const selectedPanelAtom = atom((get) => {
@@ -68,7 +47,7 @@ export const selectedPanelAtom = atom((get) => {
   if (mode === "product") {
     const id = get(selectedPanelIdAtom);
     if (!id) return null;
-    return panelsData.find((p) => p.id === id) ?? null;
+    return panels.find((p) => p.id === id) ?? null;
   }
 
   // Technology mode — create virtual panel from generic specs
@@ -84,7 +63,7 @@ export const selectedTurbineAtom = atom((get) => {
   if (mode === "product") {
     const id = get(selectedTurbineIdAtom);
     if (!id) return null;
-    return turbinesData.find((t) => t.id === id) ?? null;
+    return turbines.find((t) => t.id === id) ?? null;
   }
 
   // Technology mode — create virtual turbine from generic specs
@@ -119,10 +98,10 @@ export const solarResultAtom = atom<SolarCalculationResult | null>((get) => {
 
 // Wind calculation result
 export const windResultAtom = atom<WindCalculationResult | null>((get) => {
-  const solarData = get(solarDataAtom);
+  const weather = get(solarDataAtom);
   const turbine = get(selectedTurbineAtom);
   const location = get(locationAtom);
-  if (!solarData || !turbine || !location) return null;
+  if (!weather || !turbine || !location) return null;
 
   return calculateWindProduction(
     {
@@ -136,7 +115,7 @@ export const windResultAtom = atom<WindCalculationResult | null>((get) => {
       cutOutSpeed: turbine.cutOutSpeed,
       terrainType: get(terrainTypeAtom),
     },
-    solarData
+    weather
   );
 });
 
@@ -155,37 +134,55 @@ export const environmentalImpactAtom = atom<EnvironmentalImpact | null>(
   }
 );
 
-// Filtered equipment lists
+// ============ EQUIPMENT FILTERING ============
+
+interface BrandedItem {
+  brand: string;
+  model: string;
+  price: number;
+  rating: number;
+}
+
+function applySearchAndBrand<T extends BrandedItem>(
+  items: T[],
+  searchQuery: string,
+  brands: string[]
+): T[] {
+  let result = items;
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    result = result.filter(
+      (item) =>
+        item.brand.toLowerCase().includes(q) ||
+        item.model.toLowerCase().includes(q)
+    );
+  }
+  if (brands.length > 0) {
+    result = result.filter((item) => brands.includes(item.brand));
+  }
+  return result;
+}
+
+function applyPriceFilter<T extends { price: number }>(
+  items: T[],
+  range: readonly [number, number]
+): T[] {
+  return items.filter((i) => i.price >= range[0] && i.price <= range[1]);
+}
+
+// Filtered solar panels
 export const filteredPanelsAtom = atom((get) => {
   const filters = get(equipmentFiltersAtom);
-  let panels = [...panelsData];
+  let result = applySearchAndBrand([...panels], filters.searchQuery, filters.brands);
 
-  if (filters.searchQuery) {
-    const q = filters.searchQuery.toLowerCase();
-    panels = panels.filter(
-      (p) =>
-        p.brand.toLowerCase().includes(q) ||
-        p.model.toLowerCase().includes(q)
-    );
-  }
-  if (filters.brands.length > 0) {
-    panels = panels.filter((p) => filters.brands.includes(p.brand));
-  }
   if (filters.technologyTypes.length > 0) {
-    panels = panels.filter((p) =>
-      filters.technologyTypes.includes(p.technology)
-    );
+    result = result.filter((p) => filters.technologyTypes.includes(p.technology));
   }
-  panels = panels.filter(
-    (p) =>
-      p.price >= filters.priceRange[0] && p.price <= filters.priceRange[1]
+  result = applyPriceFilter(result, filters.priceRange);
+  result = result.filter(
+    (p) => p.wattage >= filters.wattageRange[0] && p.wattage <= filters.wattageRange[1]
   );
-  panels = panels.filter(
-    (p) =>
-      p.wattage >= filters.wattageRange[0] &&
-      p.wattage <= filters.wattageRange[1]
-  );
-  panels = panels.filter(
+  result = result.filter(
     (p) =>
       p.efficiency >= filters.efficiencyRange[0] &&
       p.efficiency <= filters.efficiencyRange[1]
@@ -193,47 +190,26 @@ export const filteredPanelsAtom = atom((get) => {
 
   switch (filters.sortBy) {
     case "price-asc":
-      panels.sort((a, b) => a.price - b.price);
-      break;
+      return result.sort((a, b) => a.price - b.price);
     case "price-desc":
-      panels.sort((a, b) => b.price - a.price);
-      break;
+      return result.sort((a, b) => b.price - a.price);
     case "efficiency":
-      panels.sort((a, b) => b.efficiency - a.efficiency);
-      break;
+      return result.sort((a, b) => b.efficiency - a.efficiency);
     case "wattage":
-      panels.sort((a, b) => b.wattage - a.wattage);
-      break;
+      return result.sort((a, b) => b.wattage - a.wattage);
     case "rating":
-      panels.sort((a, b) => b.rating - a.rating);
-      break;
+      return result.sort((a, b) => b.rating - a.rating);
     default:
-      break;
+      return result;
   }
-
-  return panels;
 });
 
+// Filtered batteries
 export const filteredBatteriesAtom = atom((get) => {
   const filters = get(equipmentFiltersAtom);
-  let batteries = [...batteriesData];
-
-  if (filters.searchQuery) {
-    const q = filters.searchQuery.toLowerCase();
-    batteries = batteries.filter(
-      (b) =>
-        b.brand.toLowerCase().includes(q) ||
-        b.model.toLowerCase().includes(q)
-    );
-  }
-  if (filters.brands.length > 0) {
-    batteries = batteries.filter((b) => filters.brands.includes(b.brand));
-  }
-  batteries = batteries.filter(
-    (b) =>
-      b.price >= filters.priceRange[0] && b.price <= filters.priceRange[1]
-  );
-  batteries = batteries.filter(
+  let result = applySearchAndBrand([...batteries], filters.searchQuery, filters.brands);
+  result = applyPriceFilter(result, filters.priceRange);
+  result = result.filter(
     (b) =>
       b.capacityKwh >= filters.capacityRange[0] &&
       b.capacityKwh <= filters.capacityRange[1]
@@ -241,118 +217,64 @@ export const filteredBatteriesAtom = atom((get) => {
 
   switch (filters.sortBy) {
     case "price-asc":
-      batteries.sort((a, b) => a.price - b.price);
-      break;
+      return result.sort((a, b) => a.price - b.price);
     case "price-desc":
-      batteries.sort((a, b) => b.price - a.price);
-      break;
+      return result.sort((a, b) => b.price - a.price);
     case "capacity":
-      batteries.sort((a, b) => b.capacityKwh - a.capacityKwh);
-      break;
+      return result.sort((a, b) => b.capacityKwh - a.capacityKwh);
     case "rating":
-      batteries.sort((a, b) => b.rating - a.rating);
-      break;
+      return result.sort((a, b) => b.rating - a.rating);
     default:
-      break;
+      return result;
   }
-
-  return batteries;
 });
 
 // Filtered turbines
 export const filteredTurbinesAtom = atom((get) => {
   const filters = get(equipmentFiltersAtom);
-  let turbines = [...turbinesData];
-
-  if (filters.searchQuery) {
-    const q = filters.searchQuery.toLowerCase();
-    turbines = turbines.filter(
-      (t) =>
-        t.brand.toLowerCase().includes(q) ||
-        t.model.toLowerCase().includes(q)
-    );
-  }
-  if (filters.brands.length > 0) {
-    turbines = turbines.filter((t) => filters.brands.includes(t.brand));
-  }
-  turbines = turbines.filter(
-    (t) =>
-      t.price >= filters.priceRange[0] && t.price <= filters.priceRange[1]
-  );
+  let result = applySearchAndBrand([...turbines], filters.searchQuery, filters.brands);
+  result = applyPriceFilter(result, filters.priceRange);
 
   switch (filters.sortBy) {
     case "price-asc":
-      turbines.sort((a, b) => a.price - b.price);
-      break;
+      return result.sort((a, b) => a.price - b.price);
     case "price-desc":
-      turbines.sort((a, b) => b.price - a.price);
-      break;
+      return result.sort((a, b) => b.price - a.price);
     case "wattage":
-      turbines.sort((a, b) => b.ratedPowerW - a.ratedPowerW);
-      break;
+      return result.sort((a, b) => b.ratedPowerW - a.ratedPowerW);
     case "rating":
-      turbines.sort((a, b) => b.rating - a.rating);
-      break;
+      return result.sort((a, b) => b.rating - a.rating);
     default:
-      break;
+      return result;
   }
-
-  return turbines;
 });
 
 // Filtered inverters
 export const filteredInvertersAtom = atom((get) => {
   const filters = get(equipmentFiltersAtom);
-  let inverters = [...invertersData];
-
-  if (filters.searchQuery) {
-    const q = filters.searchQuery.toLowerCase();
-    inverters = inverters.filter(
-      (inv) =>
-        inv.brand.toLowerCase().includes(q) ||
-        inv.model.toLowerCase().includes(q)
-    );
-  }
-  if (filters.brands.length > 0) {
-    inverters = inverters.filter((inv) => filters.brands.includes(inv.brand));
-  }
-  inverters = inverters.filter(
-    (inv) =>
-      inv.price >= filters.priceRange[0] && inv.price <= filters.priceRange[1]
-  );
+  let result = applySearchAndBrand([...inverters], filters.searchQuery, filters.brands);
+  result = applyPriceFilter(result, filters.priceRange);
 
   switch (filters.sortBy) {
     case "price-asc":
-      inverters.sort((a, b) => a.price - b.price);
-      break;
+      return result.sort((a, b) => a.price - b.price);
     case "price-desc":
-      inverters.sort((a, b) => b.price - a.price);
-      break;
+      return result.sort((a, b) => b.price - a.price);
     case "efficiency":
-      inverters.sort((a, b) => b.efficiency - a.efficiency);
-      break;
+      return result.sort((a, b) => b.efficiency - a.efficiency);
     case "wattage":
-      inverters.sort((a, b) => b.ratedPowerW - a.ratedPowerW);
-      break;
+      return result.sort((a, b) => b.ratedPowerW - a.ratedPowerW);
     case "rating":
-      inverters.sort((a, b) => b.rating - a.rating);
-      break;
+      return result.sort((a, b) => b.rating - a.rating);
     default:
-      break;
+      return result;
   }
-
-  return inverters;
 });
 
 // Comparison items
 export const comparisonItemsAtom = atom((get) => {
   const ids = get(comparisonIdsAtom);
-  const allItems = [
-    ...panelsData,
-    ...batteriesData,
-    ...turbinesData,
-    ...invertersData,
-  ];
+  const allItems = [...panels, ...batteries, ...turbines, ...inverters];
   return ids
     .map((id) => allItems.find((item) => item.id === id))
     .filter(Boolean);

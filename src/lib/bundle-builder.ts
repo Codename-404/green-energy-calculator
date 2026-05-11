@@ -1,11 +1,9 @@
-import solarPanels from "@/data/solar-panels.json";
-import inverters from "@/data/inverters.json";
-import batteries from "@/data/batteries.json";
-import type {
-  SolarPanel,
-  Inverter,
-  Battery,
-} from "@/types/equipment";
+import {
+  panels as PANELS,
+  inverters as INVERTERS,
+  batteries as BATTERIES,
+} from "@/data";
+import type { SolarPanel, Inverter, Battery } from "@/types/equipment";
 import type { LocationData } from "@/types/location";
 import type { SolarIrradianceData } from "@/types/api";
 import type { LoadProfile } from "@/types/appliance";
@@ -18,10 +16,6 @@ import { sizeSolarArray } from "./solar-sizing";
 import { calculateROI } from "./roi-calculations";
 import { calculateEnvironmentalImpact } from "./environmental-impact";
 import type { RegionKey } from "./constants";
-
-const PANELS = solarPanels as SolarPanel[];
-const INVERTERS = inverters as Inverter[];
-const BATTERIES = batteries as Battery[];
 
 const TIER_TO_TECH: Record<BudgetTier, SolarPanel["technology"]> = {
   budget: "polycrystalline",

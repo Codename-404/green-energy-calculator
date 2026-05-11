@@ -22,17 +22,12 @@ import {
 } from "@/components/ui/card";
 import { REGIONS } from "@/lib/constants";
 import { FileText, Sun, Zap, Leaf, TrendingUp } from "lucide-react";
-import type { SolarPanel, Battery as BatteryType, Inverter, WindTurbine } from "@/types/equipment";
-
-import panelsData from "@/data/solar-panels.json";
-import batteriesData from "@/data/batteries.json";
-import invertersData from "@/data/inverters.json";
-import turbinesData from "@/data/wind-turbines.json";
-
-const allPanels = panelsData as unknown as SolarPanel[];
-const allBatteries = batteriesData as unknown as BatteryType[];
-const allInverters = invertersData as unknown as Inverter[];
-const allTurbines = turbinesData as unknown as WindTurbine[];
+import {
+  panels as allPanels,
+  batteries as allBatteries,
+  inverters as allInverters,
+  turbines as allTurbines,
+} from "@/data";
 
 /** Summary section with a title and rows */
 function SummarySection({

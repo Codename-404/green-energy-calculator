@@ -17,21 +17,12 @@ import {
 } from "@/components/ui/select";
 import { Search, RotateCcw, Sun, Battery, Wind, Zap } from "lucide-react";
 import type { EquipmentCategory, EquipmentFilters } from "@/types/equipment";
-import solarPanels from "@/data/solar-panels.json";
-import batteries from "@/data/batteries.json";
-import windTurbines from "@/data/wind-turbines.json";
-import inverters from "@/data/inverters.json";
-import type {
-  SolarPanel,
-  Battery as BatteryType,
-  WindTurbine,
-  Inverter,
-} from "@/types/equipment";
-
-const panelsData = solarPanels as unknown as SolarPanel[];
-const batteriesData = batteries as unknown as BatteryType[];
-const turbinesData = windTurbines as unknown as WindTurbine[];
-const invertersData = inverters as unknown as Inverter[];
+import {
+  panels as panelsData,
+  batteries as batteriesData,
+  turbines as turbinesData,
+  inverters as invertersData,
+} from "@/data";
 
 const CATEGORY_TABS = [
   { value: "panels" as const, label: "Panels", icon: Sun },

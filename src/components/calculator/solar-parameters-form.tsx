@@ -13,8 +13,7 @@ import {
   solarWattageTierAtom,
 } from "@/store/atoms";
 import { selectedPanelAtom } from "@/store/derived";
-import solarPanels from "@/data/solar-panels.json";
-import type { SolarPanel } from "@/types/equipment";
+import { panels } from "@/data";
 import { SOLAR_TECHNOLOGY_SPECS } from "@/lib/technology-specs";
 import {
   Select,
@@ -41,8 +40,6 @@ import {
 } from "@/components/ui/card";
 import { formatPercent, formatPower, formatCurrency } from "@/lib/formatters";
 import { Zap, Sun, Layers, Package } from "lucide-react";
-
-const panels = solarPanels as unknown as SolarPanel[];
 
 /** Extract a single number from the slider's onValueChange callback */
 function sliderValue(val: number | readonly number[]): number {

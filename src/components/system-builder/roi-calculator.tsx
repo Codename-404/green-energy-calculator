@@ -26,19 +26,9 @@ import {
   Area,
   ComposedChart,
 } from "recharts";
-import type { SolarPanel, Battery, Inverter, WindTurbine } from "@/types/equipment";
 import type { ROIResult } from "@/types/calculations";
 import { REGIONS } from "@/lib/constants";
-
-import panelsData from "@/data/solar-panels.json";
-import batteriesData from "@/data/batteries.json";
-import invertersData from "@/data/inverters.json";
-import turbinesData from "@/data/wind-turbines.json";
-
-const panels = panelsData as unknown as SolarPanel[];
-const batteries = batteriesData as unknown as Battery[];
-const inverters = invertersData as unknown as Inverter[];
-const turbines = turbinesData as unknown as WindTurbine[];
+import { panels, batteries, inverters, turbines } from "@/data";
 
 /** Single stat display card */
 function StatCard({

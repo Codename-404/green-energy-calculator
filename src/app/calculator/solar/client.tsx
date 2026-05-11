@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { initEquipmentData } from "@/store/derived";
 import { useUrlSync } from "@/hooks/use-url-sync";
 import { useLocationHydration } from "@/hooks/use-location-hydration";
 import { LocationInput } from "@/components/calculator/location-input";
@@ -22,11 +20,6 @@ import { Sun, Settings } from "lucide-react";
 export function SolarCalculatorClient() {
   const { isHydrated, urlLat, urlLng } = useUrlSync("solar");
   useLocationHydration(urlLat, urlLng, isHydrated);
-
-  /** Initialize equipment data on mount so derived atoms can access panel data */
-  useEffect(() => {
-    initEquipmentData();
-  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8 md:py-12">

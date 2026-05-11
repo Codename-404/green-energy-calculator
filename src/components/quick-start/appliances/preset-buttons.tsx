@@ -8,18 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { aggregateLoad } from "@/lib/appliance-load";
 import { applianceSelectionsAtom } from "@/store/atoms";
-import type { ApplianceSelection } from "@/types/appliance";
-import presetsData from "@/data/appliance-presets.json";
-
-interface Preset {
-  id: string;
-  label: string;
-  description: string;
-  icon: string;
-  items: ApplianceSelection[];
-}
-
-const PRESETS = presetsData as Preset[];
+import { appliancePresets as PRESETS, type AppliancePreset } from "@/data";
 
 function resolveIcon(name: string): LucideIcon {
   const record = LucideIcons as unknown as Record<string, LucideIcon>;
@@ -38,7 +27,7 @@ export function PresetButtons() {
     [],
   );
 
-  const apply = (preset: Preset) => {
+  const apply = (preset: AppliancePreset) => {
     setSelections(preset.items.map((i) => ({ ...i })));
   };
 

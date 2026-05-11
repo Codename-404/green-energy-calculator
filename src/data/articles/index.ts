@@ -1,15 +1,7 @@
 import type { Article } from "@/types/content";
+import { articles } from "@/data";
 
-import solarPanelTypes from "./solar-panel-types.json";
-import batteryChemistryGuide from "./battery-chemistry-guide.json";
-import howWeCalculate from "./how-we-calculate.json";
-
-/** All available articles */
-export const articles: Article[] = [
-  howWeCalculate as unknown as Article,
-  solarPanelTypes as unknown as Article,
-  batteryChemistryGuide as unknown as Article,
-];
+export { articles };
 
 /** Look up an article by its slug */
 export function getArticleBySlug(slug: string): Article | undefined {

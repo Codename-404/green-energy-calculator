@@ -26,23 +26,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Settings2, Sun, Battery, Zap, Wind, DollarSign } from "lucide-react";
-import type { SolarPanel, Battery as BatteryType, Inverter, WindTurbine } from "@/types/equipment";
 import type { SystemConfiguration } from "@/types/calculations";
-
-import panelsData from "@/data/solar-panels.json";
-import batteriesData from "@/data/batteries.json";
-import invertersData from "@/data/inverters.json";
-import turbinesData from "@/data/wind-turbines.json";
-import electricityRates from "@/data/electricity-rates.json";
-
-const allPanels = panelsData as unknown as SolarPanel[];
-const allBatteries = batteriesData as unknown as BatteryType[];
-const allInverters = invertersData as unknown as Inverter[];
-const allTurbines = turbinesData as unknown as WindTurbine[];
-const rates = electricityRates as Record<
-  string,
-  Record<string, { state?: string; country?: string; rate: number; currency: string }>
->;
+import {
+  panels as allPanels,
+  batteries as allBatteries,
+  inverters as allInverters,
+  turbines as allTurbines,
+  electricityRates as rates,
+} from "@/data";
 
 /** Group region keys by their group label */
 const REGION_GROUPS = Object.entries(REGIONS).reduce(

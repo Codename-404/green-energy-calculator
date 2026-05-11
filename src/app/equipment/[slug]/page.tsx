@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import solarPanels from "@/data/solar-panels.json";
-import batteries from "@/data/batteries.json";
-import windTurbines from "@/data/wind-turbines.json";
-import inverters from "@/data/inverters.json";
+import {
+  panels as allPanels,
+  batteries as allBatteries,
+  turbines as allTurbines,
+  inverters as allInverters,
+} from "@/data";
 import {
   Card,
   CardContent,
@@ -42,11 +44,6 @@ import type {
   Inverter,
   AnyEquipment,
 } from "@/types/equipment";
-
-const allPanels = solarPanels as unknown as SolarPanel[];
-const allBatteries = batteries as unknown as BatteryType[];
-const allTurbines = windTurbines as unknown as WindTurbine[];
-const allInverters = inverters as unknown as Inverter[];
 
 const allEquipment: AnyEquipment[] = [
   ...allPanels,

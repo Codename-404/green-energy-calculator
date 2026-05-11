@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { initEquipmentData } from "@/store/derived";
 import { useWizard } from "@/hooks/use-wizard";
 import { WizardStepper } from "@/components/system-builder/wizard/wizard-stepper";
 import { WizardNavigation } from "@/components/system-builder/wizard/wizard-navigation";
@@ -11,10 +9,6 @@ import { StepFinancial } from "@/components/system-builder/wizard/step-financial
 import { StepResults } from "@/components/system-builder/wizard/step-results";
 
 export function SystemBuilderClient() {
-  useEffect(() => {
-    initEquipmentData();
-  }, []);
-
   const wizard = useWizard();
 
   return (

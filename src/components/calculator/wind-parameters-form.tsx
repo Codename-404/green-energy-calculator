@@ -11,8 +11,7 @@ import {
   windPowerTierAtom,
 } from "@/store/atoms";
 import { selectedTurbineAtom } from "@/store/derived";
-import windTurbines from "@/data/wind-turbines.json";
-import type { WindTurbine } from "@/types/equipment";
+import { turbines } from "@/data";
 import { WIND_TECHNOLOGY_SPECS } from "@/lib/technology-specs";
 import {
   Select,
@@ -52,8 +51,6 @@ import {
   Layers,
   Package,
 } from "lucide-react";
-
-const turbines = windTurbines as unknown as WindTurbine[];
 
 const TERRAIN_OPTIONS = [
   {

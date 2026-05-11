@@ -1,4 +1,4 @@
-import appliancesData from "@/data/appliances.json";
+import { appliances as APPLIANCES } from "@/data";
 import type {
   Appliance,
   ApplianceSelection,
@@ -6,7 +6,7 @@ import type {
   LoadProfile,
 } from "@/types/appliance";
 
-export const APPLIANCES = appliancesData as Appliance[];
+export { APPLIANCES };
 
 export const APPLIANCE_BY_ID: Record<string, Appliance> = Object.fromEntries(
   APPLIANCES.map((a) => [a.id, a]),

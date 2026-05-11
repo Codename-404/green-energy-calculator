@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { useAtomValue } from "jotai";
 import { activeEquipmentTabAtom } from "@/store/atoms";
 import {
@@ -8,7 +7,6 @@ import {
   filteredBatteriesAtom,
   filteredTurbinesAtom,
   filteredInvertersAtom,
-  initEquipmentData,
 } from "@/store/derived";
 import { EquipmentCard } from "./equipment-card";
 import type { AnyEquipment } from "@/types/equipment";
@@ -20,10 +18,6 @@ export function EquipmentGrid() {
   const batteries = useAtomValue(filteredBatteriesAtom);
   const turbines = useAtomValue(filteredTurbinesAtom);
   const inverters = useAtomValue(filteredInvertersAtom);
-
-  useEffect(() => {
-    initEquipmentData();
-  }, []);
 
   let items: AnyEquipment[] = [];
   switch (activeTab) {

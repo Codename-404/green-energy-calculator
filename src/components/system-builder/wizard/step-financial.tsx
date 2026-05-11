@@ -16,12 +16,7 @@ import { Label } from "@/components/ui/label";
 import { DollarSign } from "lucide-react";
 import type { SystemConfiguration } from "@/types/calculations";
 
-import electricityRates from "@/data/electricity-rates.json";
-
-const rates = electricityRates as Record<
-  string,
-  Record<string, { state?: string; country?: string; rate: number; currency: string }>
->;
+import { electricityRates as rates } from "@/data";
 
 export function StepFinancial() {
   const [config, setConfig] = useAtom(systemConfigAtom);

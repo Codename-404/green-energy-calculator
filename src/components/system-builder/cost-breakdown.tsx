@@ -22,17 +22,7 @@ import {
 import { Receipt } from "lucide-react";
 import { formatCurrency } from "@/lib/formatters";
 import { REGIONS, INSTALLATION_COST_PER_WATT } from "@/lib/constants";
-import type { SolarPanel, Battery, Inverter, WindTurbine } from "@/types/equipment";
-
-import panelsData from "@/data/solar-panels.json";
-import batteriesData from "@/data/batteries.json";
-import invertersData from "@/data/inverters.json";
-import turbinesData from "@/data/wind-turbines.json";
-
-const panels = panelsData as unknown as SolarPanel[];
-const batteries = batteriesData as unknown as Battery[];
-const inverters = invertersData as unknown as Inverter[];
-const turbines = turbinesData as unknown as WindTurbine[];
+import { panels, batteries, inverters, turbines } from "@/data";
 
 interface CostLineItem {
   label: string;

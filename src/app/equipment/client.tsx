@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useAtomValue } from "jotai";
 import { comparisonIdsAtom } from "@/store/atoms";
-import { initEquipmentData } from "@/store/derived";
 import { EquipmentFilters } from "@/components/equipment/equipment-filters";
 import { EquipmentGrid } from "@/components/equipment/equipment-grid";
 import { ComparisonTray } from "@/components/equipment/comparison-tray";
@@ -26,10 +25,6 @@ export function EquipmentClient() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
   const comparisonIds = useAtomValue(comparisonIdsAtom);
-
-  useEffect(() => {
-    initEquipmentData();
-  }, []);
 
   const handleCompareClick = useCallback(() => {
     setShowComparison(true);
