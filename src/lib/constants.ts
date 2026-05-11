@@ -1,8 +1,5 @@
 // Physical constants
 export const AIR_DENSITY_SEA_LEVEL = 1.225; // kg/m³
-export const BETZ_LIMIT = 0.593;
-export const STC_TEMPERATURE = 25; // °C (Standard Test Conditions)
-export const NOCT_TEMPERATURE = 45; // °C (Nominal Operating Cell Temperature)
 
 // Default system parameters
 export const DEFAULT_TILT_ANGLE = 30;
@@ -66,9 +63,7 @@ export const WIND_TERRAIN_SPEED_CORRECTIONS: Record<string, number> = {
 // Reference height for wind data (NASA POWER provides at 2m)
 export const WIND_REFERENCE_HEIGHT = 2; // meters
 
-// EPA emission factors (kept for backwards compat, prefer REGIONS[key].co2PerKwh)
-export const CO2_PER_KWH = 0.417; // kg CO2/kWh (US EPA eGRID average)
-export const CO2_PER_KWH_EU = 0.276; // kg CO2/kWh (EU average)
+// EPA emission-equivalence factors (region-specific grid factor lives in REGIONS[key].co2PerKwh)
 export const CO2_PER_TREE_YEAR = 22; // kg CO2 absorbed per tree per year
 export const CO2_PER_GALLON_GAS = 8.887; // kg CO2 per gallon gasoline
 export const CO2_PER_BARREL_OIL = 430; // kg CO2 per barrel of oil

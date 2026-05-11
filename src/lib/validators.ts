@@ -21,10 +21,3 @@ export const windParamsSchema = z.object({
   hubHeight: z.coerce.number().min(5).max(200),
   terrainType: z.enum(["open", "suburban", "urban", "coastal"]),
 });
-
-export const heatingParamsSchema = z.object({
-  homeSizeSqFt: z.coerce.number().min(100).max(50000),
-  insulationQuality: z.enum(["poor", "average", "good", "excellent"]),
-  stories: z.coerce.number().int().min(1).max(3),
-  currentFuel: z.enum(["natural-gas", "oil", "electric-resistance", "propane", "coal", "kerosene", "none"]),
-});

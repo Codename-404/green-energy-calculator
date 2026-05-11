@@ -258,7 +258,7 @@
     },
     {
       "type": "paragraph",
-      "text": "If you want to reproduce or audit any of our numbers, the full formulas live in *src/lib/solar-calculations.ts*, *src/lib/wind-calculations.ts*, and the heating calculation modules. The validation scripts that produced the bias numbers above are in *scripts/validate/*. We welcome corrections, better datasets, and improved physics -- renewable energy planning works better when the math is open."
+      "text": "If you want to reproduce or audit any of our numbers, the full formulas live in *src/lib/solar-calculations.ts* and *src/lib/wind-calculations.ts*. The validation scripts that produced the bias numbers above are in *scripts/validate/*. We welcome corrections, better datasets, and improved physics -- renewable energy planning works better when the math is open."
     }
   ]
 }
