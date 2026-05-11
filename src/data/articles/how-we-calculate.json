@@ -1,0 +1,264 @@
+{
+  "slug": "how-we-calculate",
+  "title": "How We Calculate Your Estimates: Methodology, Data Sources, and Accuracy",
+  "description": "A transparent look at the formulas, climate data, and real-world validation behind every production estimate -- including the honest caveats about what we can and cannot model.",
+  "category": "guide",
+  "heroImage": {
+    "src": "https://images.unsplash.com/photo-1707247111552-aaf74241058b?w=1200&h=500&fit=crop",
+    "alt": "Aerial view of a large solar panel array installed on a building rooftop",
+    "credit": "Chirayu Trivedi",
+    "creditUrl": "https://unsplash.com/@rc820"
+  },
+  "author": "GreenCalc Editorial",
+  "publishedAt": "2026-04-10T00:00:00Z",
+  "updatedAt": "2026-04-10T00:00:00Z",
+  "readingTime": 12,
+  "tags": ["methodology", "accuracy", "validation", "transparency", "NASA POWER", "NREL"],
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Why Transparency Matters",
+      "id": "introduction"
+    },
+    {
+      "type": "paragraph",
+      "text": "Every number you see on this site is a **modeled estimate**, not a measurement. We take your location, your system configuration, and a large climate dataset, then apply well-established physics to predict how much energy the system would produce over a typical year. This page explains exactly how we do it, where the data comes from, how we validated the math against real-world plant data, and -- most importantly -- where the limits of this approach lie."
+    },
+    {
+      "type": "callout",
+      "variant": "info",
+      "title": "The TL;DR",
+      "text": "Typical accuracy is **within ±10-15%** of measured annual output for a well-installed system in a location with reliable climate data. Our wind formula is validated to within **~1% bias** against real SCADA data. Our solar formula has a residual **~13% underestimation bias** against one validation dataset, most of which is methodological rather than a formula bug."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Data Sources",
+      "id": "data-sources"
+    },
+    {
+      "type": "paragraph",
+      "text": "We rely on two primary external data sources, both free and well-established in the renewable energy industry."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "NASA POWER (climate input)",
+      "id": "nasa-power"
+    },
+    {
+      "type": "paragraph",
+      "text": "When you pick a location, we query the [NASA POWER project](https://power.larc.nasa.gov/) for long-term monthly averages at that latitude and longitude. POWER aggregates over 40 years of satellite and reanalysis data and is widely used by researchers and PV planners. Specifically, we pull:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**ALLSKY_SFC_SW_DWN** -- all-sky surface shortwave downward irradiance (kWh/m²/day), i.e. Peak Sun Hours",
+        "**T2M / T2M_MAX / T2M_MIN** -- air temperature at 2m (°C)",
+        "**WS2M** -- wind speed at 2m above surface (m/s)"
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "warning",
+      "title": "What this means for you",
+      "text": "POWER data is **long-term climatology**, not a weather forecast. It's great for annual averages but will not capture any given year's anomalies -- a cloudy summer, an unusually windy winter, or a drought. A real system will deviate from these averages year-to-year."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Kaggle SCADA Datasets (validation)",
+      "id": "kaggle"
+    },
+    {
+      "type": "paragraph",
+      "text": "To check whether our math actually predicts reality, we compare our formulas against published SCADA (supervisory control and data acquisition) recordings from real operating plants:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "[Wind Turbine SCADA Dataset](https://www.kaggle.com/datasets/berkerisen/wind-turbine-scada-dataset) -- 10-minute interval readings from a 3.6 MW onshore turbine, including measured wind speed, active power output, and the manufacturer's theoretical power curve.",
+        "[Solar Power Generation Data (Plant 1)](https://www.kaggle.com/datasets/anikannal/solar-power-generation-data) -- 15-minute interval readings of DC and AC power from an operating Indian solar plant, plus on-site irradiance and module temperature sensors."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Solar Calculations",
+      "id": "solar"
+    },
+    {
+      "type": "paragraph",
+      "text": "Our solar production model follows the [NREL PVWatts](https://pvwatts.nrel.gov/) methodology, which is the industry-standard tool for modeled photovoltaic production. The core formula is:"
+    },
+    {
+      "type": "quote",
+      "text": "daily_energy = P_rated × PSH × tiltCorrection × azimuthCorrection × tempDerate × shadingFactor × (1 - systemLosses)"
+    },
+    {
+      "type": "paragraph",
+      "text": "Each term addresses a specific real-world loss mechanism:"
+    },
+    {
+      "type": "spec-table",
+      "title": "Solar Formula Components",
+      "headers": ["Term", "What it represents", "Typical value"],
+      "rows": [
+        ["P_rated", "System nameplate DC capacity", "panelWattage × panelCount ÷ 1000 (kW)"],
+        ["PSH", "Peak Sun Hours from NASA POWER", "3-7 kWh/m²/day depending on latitude"],
+        ["tiltCorrection", "Penalty for non-optimal tilt angle", "1.0 at latitude × 0.87, scales down quadratically"],
+        ["azimuthCorrection", "Penalty for non-south-facing arrays", "cos(azimuth_deviation), floored at 0.3"],
+        ["tempDerate", "Loss from panels getting hot", "0.88-1.05 (cold climates can exceed 1.0)"],
+        ["shadingFactor", "Fraction of array not shaded", "0.85-1.0 typical"],
+        ["systemLosses", "Soiling, wiring, inverter, mismatch", "14% default (PVWatts convention)"]
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Temperature Derating (The NOCT Model)",
+      "id": "noct"
+    },
+    {
+      "type": "paragraph",
+      "text": "Solar panels lose efficiency when hot -- typically around -0.35% per °C above the 25°C rating temperature. We estimate cell temperature using the NOCT (Nominal Operating Cell Temperature) model:"
+    },
+    {
+      "type": "quote",
+      "text": "cellTemp = ambient + (NOCT - 20) × (irradiance / 0.8)"
+    },
+    {
+      "type": "paragraph",
+      "text": "With a typical NOCT of 45°C this simplifies to **cellTemp = ambient + 25 × (irradiance / 0.8)**. We deliberately scale the cell heating with actual irradiance rather than applying a flat offset -- a subtle point that makes a meaningful difference in cold climates where panels stay cool and can actually outperform their STC rating."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Solar Validation Results",
+      "id": "solar-validation"
+    },
+    {
+      "type": "paragraph",
+      "text": "We tested four models against 1,634 matched daytime data points from the Kaggle Plant 1 dataset to isolate where our formula's errors come from:"
+    },
+    {
+      "type": "spec-table",
+      "title": "Solar Model Comparison (vs measured DC output)",
+      "headers": ["Model", "Bias", "What it tests"],
+      "rows": [
+        ["Production formula (irr-scaled NOCT, 14% losses)", "-12.9%", "The model this site actually uses"],
+        ["Same + DC-only losses (5%)", "-5.3%", "Removes inverter loss to compare against DC data"],
+        ["Ground truth (measured module temp, 5% losses)", "-12.4%", "Isolates loss model from temperature model"],
+        ["Ideal (measured temp, zero losses)", "-7.8%", "Pure physics, no derating"]
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "tip",
+      "title": "What this tells us",
+      "text": "The residual -7.8% bias in the **ideal** model (pure physics, zero losses) means most of the gap isn't a formula error -- it's methodological. Plant 1 reports DC power against an *inferred* nameplate (the top 1% of observed output at high irradiance), and its AC data has a known reporting quirk. After accounting for this, our formula agrees with real plant behavior to within a few percentage points."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Wind Calculations",
+      "id": "wind"
+    },
+    {
+      "type": "paragraph",
+      "text": "Wind is trickier than solar because the power available in wind scales with the **cube** of wind speed -- a 10% error in wind speed becomes a 33% error in predicted power. We take this seriously with a multi-step adjustment chain."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "The Wind Speed Adjustment Chain",
+      "id": "wind-adjustment"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Start** with NASA POWER's WS2M (wind speed at 2 meters above ground, approximating open terrain).",
+        "**Apply terrain correction** -- urban/suburban areas have much lower near-surface wind than open farmland, even if the 2m reading is identical. We reduce the NASA number by up to 65% in dense urban areas.",
+        "**Extrapolate to hub height** using the power law *V_hub = V_ref × (h_hub / h_ref)^α*, where α is the wind shear exponent (0.14 for open, up to 0.35 for urban).",
+        "**Apply the turbine power curve**: cubic law below rated speed, capped at nameplate above rated speed, zero outside the cut-in/cut-out range."
+      ]
+    },
+    {
+      "type": "quote",
+      "text": "P = 0.5 × ρ × A × v³ × Cp × η_generator × η_system"
+    },
+    {
+      "type": "paragraph",
+      "text": "Where **ρ** is air density (adjusted for elevation), **A** is the rotor swept area, **v** is wind speed at hub height, **Cp ≈ 0.40** is the rotor aerodynamic coefficient (well below the 0.593 Betz limit), and the generator and system efficiencies (**0.9 × 0.85 ≈ 0.77**) cover electrical conversion losses."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Wind Validation Results",
+      "id": "wind-validation"
+    },
+    {
+      "type": "paragraph",
+      "text": "We compared our power curve against **every 10-minute SCADA reading** from a real 3.6 MW onshore turbine across the 3-25 m/s operating range, covering tens of thousands of data points:"
+    },
+    {
+      "type": "spec-table",
+      "title": "Wind Formula Overall Accuracy",
+      "headers": ["Metric", "Result", "Interpretation"],
+      "rows": [
+        ["Overall bias", "-0.7%", "Essentially unbiased across the full dataset"],
+        ["RMSE (mid-range winds)", "< 3% of manufacturer's theoretical curve", "Tracks the real power curve very closely"],
+        ["Low-wind bins (3-4 m/s)", "Over-predicts by ~200% relative", "Small absolute error: ~60 kW on a 3600 kW turbine"]
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "info",
+      "title": "Why the low-wind 'over-prediction' isn't a problem",
+      "text": "At 3-4 m/s the absolute error is tiny (under 2% of rated capacity) and turbines spend very little time in that speed range, so this bin contributes less than 2% to annual energy. Fixing it would require tuning Cp per turbine, which would actually *reduce* accuracy across the rest of the operating curve."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "What We Cannot Model",
+      "id": "limitations"
+    },
+    {
+      "type": "paragraph",
+      "text": "Being transparent about our limits is as important as being transparent about our methods. The following factors genuinely affect real-world production but cannot be predicted from the inputs you provide:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Soiling dynamics** -- dust, pollen, and bird droppings accumulate gradually and are washed off unpredictably by rain. We assume a constant 2% soiling loss.",
+        "**Panel and turbine degradation over time** -- real systems lose ~0.5%/year for solar and more variable amounts for wind. We estimate year-one production.",
+        "**Inverter clipping** -- if your DC/AC ratio exceeds your inverter's capacity, peak output is clipped. Our model does not distinguish DC vs AC capacity.",
+        "**Microclimate** -- a coastal cliff, a valley floor, or a rooftop heat island can deviate significantly from the nearest NASA grid point (~50 km resolution).",
+        "**Shading from neighbors, trees, chimneys** -- we use a single flat shading factor; real shading is directional and time-of-day dependent.",
+        "**Net metering, feed-in tariffs, time-of-use rates** -- financial calculations assume flat electricity rates unless you configure otherwise.",
+        "**Year-to-year weather variation** -- a single bad year can produce 15-20% less than the climatological average."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Intended Use",
+      "id": "intended-use"
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "title": "Planning tool, not a guarantee",
+      "text": "This site is designed to help you **compare technologies**, **understand trade-offs**, and **make informed early-stage decisions** about renewable energy investments. It is not a substitute for a site-specific professional assessment before you commit capital. For any installation worth more than a few thousand dollars, get a certified installer to model your specific roof, land, or home with commercial tools like NREL SAM or PVsyst."
+    },
+    {
+      "type": "paragraph",
+      "text": "If you want to reproduce or audit any of our numbers, the full formulas live in *src/lib/solar-calculations.ts*, *src/lib/wind-calculations.ts*, and the heating calculation modules. The validation scripts that produced the bias numbers above are in *scripts/validate/*. We welcome corrections, better datasets, and improved physics -- renewable energy planning works better when the math is open."
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+[
+  {
+    "id": "ac-1-ton",
+    "name": "Air Conditioner 1 Ton",
+    "icon": "AirVent",
+    "category": "cooling",
+    "watts": 1000,
+    "hoursPerDay": 6,
+    "isInductive": true,
+    "startupMultiplier": 3,
+    "aliases": ["AC", "A/C", "aircon", "air con", "1 ton", "small ac"]
+  },
+  {
+    "id": "ac-1.5-ton",
+    "name": "Air Conditioner 1.5 Ton",
+    "icon": "AirVent",
+    "category": "cooling",
+    "watts": 1500,
+    "hoursPerDay": 6,
+    "isInductive": true,
+    "startupMultiplier": 3,
+    "aliases": ["AC", "A/C", "aircon", "air con", "1.5 ton"]
+  },
+  {
+    "id": "ac-2-ton",
+    "name": "Air Conditioner 2 Ton",
+    "icon": "AirVent",
+    "category": "cooling",
+    "watts": 2000,
+    "hoursPerDay": 6,
+    "isInductive": true,
+    "startupMultiplier": 3,
+    "aliases": ["AC", "A/C", "aircon", "air con", "2 ton", "big ac"]
+  },
+  {
+    "id": "ceiling-fan",
+    "name": "Ceiling Fan",
+    "icon": "Fan",
+    "category": "cooling",
+    "watts": 75,
+    "hoursPerDay": 10,
+    "isInductive": true,
+    "startupMultiplier": 2,
+    "aliases": ["fan"]
+  },
+  {
+    "id": "fridge",
+    "name": "Refrigerator",
+    "icon": "Refrigerator",
+    "category": "appliance",
+    "watts": 150,
+    "hoursPerDay": 24,
+    "dutyCycle": 0.33,
+    "isInductive": true,
+    "startupMultiplier": 3,
+    "aliases": ["fridge", "refrigerator"]
+  },
+  {
+    "id": "freezer",
+    "name": "Deep Freezer",
+    "icon": "Snowflake",
+    "category": "appliance",
+    "watts": 200,
+    "hoursPerDay": 24,
+    "dutyCycle": 0.35,
+    "isInductive": true,
+    "startupMultiplier": 3,
+    "aliases": ["freezer", "deep freeze"]
+  },
+  {
+    "id": "washer",
+    "name": "Washing Machine",
+    "icon": "WashingMachine",
+    "category": "appliance",
+    "watts": 500,
+    "hoursPerDay": 1,
+    "isInductive": true,
+    "startupMultiplier": 3,
+    "aliases": ["washer", "laundry", "washing"]
+  },
+  {
+    "id": "water-heater",
+    "name": "Electric Water Heater",
+    "icon": "Bath",
+    "category": "appliance",
+    "watts": 3000,
+    "hoursPerDay": 2,
+    "aliases": ["geyser", "boiler", "water heater", "hot water"]
+  },
+  {
+    "id": "microwave",
+    "name": "Microwave Oven",
+    "icon": "Microwave",
+    "category": "kitchen",
+    "watts": 1000,
+    "hoursPerDay": 0.3,
+    "aliases": ["microwave"]
+  },
+  {
+    "id": "electric-kettle",
+    "name": "Electric Kettle",
+    "icon": "Coffee",
+    "category": "kitchen",
+    "watts": 1800,
+    "hoursPerDay": 0.3,
+    "aliases": ["kettle", "tea"]
+  },
+  {
+    "id": "tv-led",
+    "name": "LED TV (42\")",
+    "icon": "Tv",
+    "category": "entertainment",
+    "watts": 100,
+    "hoursPerDay": 5,
+    "aliases": ["TV", "television"]
+  },
+  {
+    "id": "led-bulb",
+    "name": "LED Light Bulb",
+    "icon": "Lightbulb",
+    "category": "lighting",
+    "watts": 10,
+    "hoursPerDay": 6,
+    "aliases": ["light", "bulb", "lamp", "LED"]
+  },
+  {
+    "id": "tube-light",
+    "name": "Tube Light",
+    "icon": "Lightbulb",
+    "category": "lighting",
+    "watts": 40,
+    "hoursPerDay": 6,
+    "aliases": ["tube", "fluorescent", "strip light"]
+  },
+  {
+    "id": "laptop",
+    "name": "Laptop",
+    "icon": "Laptop",
+    "category": "electronics",
+    "watts": 65,
+    "hoursPerDay": 6,
+    "aliases": ["laptop", "notebook", "macbook"]
+  },
+  {
+    "id": "desktop-pc",
+    "name": "Desktop PC",
+    "icon": "Monitor",
+    "category": "electronics",
+    "watts": 300,
+    "hoursPerDay": 6,
+    "aliases": ["computer", "PC", "desktop"]
+  },
+  {
+    "id": "router",
+    "name": "Wi-Fi Router",
+    "icon": "Wifi",
+    "category": "electronics",
+    "watts": 10,
+    "hoursPerDay": 24,
+    "aliases": ["wifi", "router", "modem", "internet"]
+  },
+  {
+    "id": "phone-charger",
+    "name": "Phone Charger",
+    "icon": "Smartphone",
+    "category": "electronics",
+    "watts": 20,
+    "hoursPerDay": 3,
+    "aliases": ["phone", "charger", "mobile"]
+  },
+  {
+    "id": "ev-charger-l2",
+    "name": "EV Charger (Level 2)",
+    "icon": "Car",
+    "category": "mobility",
+    "watts": 7200,
+    "hoursPerDay": 3,
+    "aliases": ["EV", "electric car", "charger", "tesla"]
+  }
+]

@@ -1,0 +1,59 @@
+{
+  "name": "green-energy-calculator",
+  "version": "0.1.0",
+  "description": "Solar and wind energy production calculator with SCADA-validated formulas, region-aware ROI, and curated equipment database. Uses NREL PVWatts methodology and free public APIs (NASA POWER, Open-Meteo).",
+  "license": "MIT",
+  "author": "Nayeem Ur Rahman Biswas",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Codename-404/green-energy-calculator"
+  },
+  "keywords": [
+    "solar",
+    "wind",
+    "renewable-energy",
+    "calculator",
+    "nrel-pvwatts",
+    "nasa-power",
+    "open-meteo",
+    "nextjs",
+    "react",
+    "typescript"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "validate:wind": "npx tsx scripts/validate/validate-wind.ts",
+    "validate:solar": "npx tsx scripts/validate/validate-solar.ts"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.3.0",
+    "@hono/zod-validator": "^0.7.6",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "hono": "^4.12.12",
+    "jotai": "^2.19.1",
+    "lucide-react": "^1.7.0",
+    "next": "16.2.2",
+    "next-themes": "^0.4.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "recharts": "^3.8.1",
+    "tailwind-merge": "^3.5.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.2",
+    "shadcn": "^4.2.0",
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "^5"
+  }
+}

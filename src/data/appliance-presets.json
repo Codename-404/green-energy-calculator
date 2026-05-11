@@ -1,0 +1,52 @@
+[
+  {
+    "id": "studio",
+    "label": "Studio",
+    "description": "Small apartment, no AC",
+    "icon": "Home",
+    "items": [
+      { "applianceId": "fridge", "quantity": 1 },
+      { "applianceId": "tv-led", "quantity": 1 },
+      { "applianceId": "led-bulb", "quantity": 4 },
+      { "applianceId": "laptop", "quantity": 1 },
+      { "applianceId": "router", "quantity": 1 },
+      { "applianceId": "ceiling-fan", "quantity": 1 }
+    ]
+  },
+  {
+    "id": "family",
+    "label": "Family home",
+    "description": "2-3 bedrooms, AC, typical appliances",
+    "icon": "House",
+    "items": [
+      { "applianceId": "ac-1.5-ton", "quantity": 1 },
+      { "applianceId": "fridge", "quantity": 1 },
+      { "applianceId": "washer", "quantity": 1 },
+      { "applianceId": "led-bulb", "quantity": 8 },
+      { "applianceId": "tv-led", "quantity": 1 },
+      { "applianceId": "microwave", "quantity": 1 },
+      { "applianceId": "laptop", "quantity": 2 },
+      { "applianceId": "router", "quantity": 1 },
+      { "applianceId": "ceiling-fan", "quantity": 2 }
+    ]
+  },
+  {
+    "id": "large-ev",
+    "label": "Large home + EV",
+    "description": "4+ bedrooms, EV charging, heavy appliances",
+    "icon": "Building2",
+    "items": [
+      { "applianceId": "ac-1.5-ton", "quantity": 2 },
+      { "applianceId": "fridge", "quantity": 1 },
+      { "applianceId": "freezer", "quantity": 1 },
+      { "applianceId": "washer", "quantity": 1 },
+      { "applianceId": "water-heater", "quantity": 1 },
+      { "applianceId": "led-bulb", "quantity": 12 },
+      { "applianceId": "tv-led", "quantity": 1 },
+      { "applianceId": "microwave", "quantity": 1 },
+      { "applianceId": "desktop-pc", "quantity": 1 },
+      { "applianceId": "router", "quantity": 1 },
+      { "applianceId": "ev-charger-l2", "quantity": 1 }
+    ]
+  }
+]

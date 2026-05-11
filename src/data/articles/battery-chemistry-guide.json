@@ -1,0 +1,426 @@
+{
+  "slug": "battery-chemistry-guide",
+  "title": "Battery Chemistry Guide: Lithium-Ion vs LFP vs Lead-Acid for Solar Storage",
+  "description": "An in-depth comparison of the three dominant battery chemistries for home solar energy storage, covering performance, safety, lifespan, and total cost of ownership.",
+  "category": "comparison",
+  "heroImage": {
+    "src": "https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=1200&h=500&fit=crop",
+    "alt": "Home battery storage system mounted on a wall beside electrical panels",
+    "credit": "Tesla",
+    "creditUrl": "https://unsplash.com/@tesla"
+  },
+  "author": "GreenCalc Editorial",
+  "publishedAt": "2026-01-15T00:00:00Z",
+  "updatedAt": "2026-03-20T00:00:00Z",
+  "readingTime": 16,
+  "tags": [
+    "batteries",
+    "lithium-ion",
+    "LFP",
+    "lead-acid",
+    "solar storage",
+    "energy storage",
+    "comparison"
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Why Battery Chemistry Matters",
+      "id": "why-chemistry-matters"
+    },
+    {
+      "type": "paragraph",
+      "text": "Battery storage is the component that transforms a solar installation from a simple grid offset tool into a true energy independence system. But not all batteries are created equal. The chemistry inside your battery determines how long it lasts, how safely it operates, how much usable energy you actually get, and ultimately how much you pay per kilowatt-hour stored over the battery's lifetime."
+    },
+    {
+      "type": "paragraph",
+      "text": "Three battery chemistries dominate the solar storage market: **NMC/NCA lithium-ion**, **LFP (lithium iron phosphate)**, and **lead-acid**. Each occupies a distinct niche based on cost, performance, and application requirements. Understanding these differences is critical before investing thousands of dollars in storage."
+    },
+    {
+      "type": "callout",
+      "variant": "info",
+      "title": "Quick Summary",
+      "text": "LFP batteries are the safest and longest-lasting choice for most home solar installations. NMC lithium-ion packs more energy into less space. Lead-acid is the cheapest upfront but most expensive over its lifetime."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Lithium-Ion (NMC/NCA)",
+      "id": "lithium-ion"
+    },
+    {
+      "type": "paragraph",
+      "text": "When people refer to \"lithium-ion\" batteries in the solar context, they typically mean **NMC** (Nickel Manganese Cobalt) or **NCA** (Nickel Cobalt Aluminum) chemistry. These are the same chemistries used in electric vehicles like the Tesla Model 3 (NCA) and Chevrolet Bolt (NMC). They offer the highest energy density of any commercial battery chemistry, meaning they store the most energy per kilogram and per liter."
+    },
+    {
+      "type": "image",
+      "src": "https://images.unsplash.com/photo-1670322196746-e8c6ea72ab90?w=800&h=450&fit=crop",
+      "alt": "Cylindrical lithium-ion battery cells viewed from above",
+      "caption": "NMC/NCA lithium-ion cells are the same technology powering most electric vehicles.",
+      "credit": "Vardan Papikyan",
+      "creditUrl": "https://unsplash.com/@varpap"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "How NMC/NCA Chemistry Works",
+      "id": "nmc-chemistry"
+    },
+    {
+      "type": "paragraph",
+      "text": "NMC batteries use a cathode made from a combination of nickel, manganese, and cobalt oxides layered in a crystal structure. During charging, lithium ions migrate from the cathode through a liquid electrolyte to a graphite anode. During discharge, the ions flow back, releasing electrical energy. The specific ratio of nickel, manganese, and cobalt determines the balance between energy density, power delivery, and thermal stability."
+    },
+    {
+      "type": "paragraph",
+      "text": "NCA chemistry is similar but replaces manganese with aluminum, which improves energy density further but slightly reduces thermal stability. Tesla's Powerwall 3 uses a proprietary NCA formulation optimized for home storage cycling patterns."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Performance Profile",
+      "id": "nmc-performance"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Energy density**: 150-270 Wh/kg (highest of all three chemistries)",
+        "**Cycle life**: 3,000-6,000 cycles at 80% depth of discharge",
+        "**Round-trip efficiency**: 85-97% (varies by product)",
+        "**Depth of discharge**: 80-100% usable capacity",
+        "**Operating temperature**: -20 to 50 degrees C (performance drops in cold)",
+        "**Calendar life**: 10-15 years typical",
+        "**Self-discharge**: 2-5% per month"
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "warning",
+      "title": "Thermal Runaway Risk",
+      "text": "NMC and NCA chemistries carry a higher risk of thermal runaway compared to LFP. While modern battery management systems (BMS) have made this extremely rare, it is the reason why some building codes restrict NMC battery placement to non-habitable spaces like garages."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Notable Products",
+      "id": "nmc-products"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Tesla Powerwall 3**: 13.5 kWh, integrated inverter, ~$9,200",
+        "**Enphase IQ Battery 5P**: 5 kWh modular, microinverter-compatible, ~$5,500",
+        "**Generac PWRcell**: 9-18 kWh scalable, 96.4% round-trip efficiency, ~$10,000",
+        "**Panasonic EverVolt Gen 3**: 17.1 kWh, AC/DC coupling, ~$15,000",
+        "**sonnenCore+**: 10 kWh, 10,000 cycles, German-engineered, ~$9,500"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "LFP (Lithium Iron Phosphate)",
+      "id": "lfp"
+    },
+    {
+      "type": "paragraph",
+      "text": "LFP (LiFePO4) batteries have surged in popularity for solar storage applications, driven by their exceptional safety record, longer cycle life, and rapidly declining costs. LFP uses an iron phosphate cathode instead of the nickel-cobalt cathode found in NMC batteries. This substitution sacrifices some energy density but gains significant advantages in safety, longevity, and thermal stability."
+    },
+    {
+      "type": "image",
+      "src": "https://images.unsplash.com/photo-1662079651579-d471c3af6a17?w=800&h=450&fit=crop",
+      "alt": "LFP battery system installed in a residential setting",
+      "caption": "LFP batteries have become the preferred choice for off-grid and whole-home backup systems.",
+      "credit": "Newpowa",
+      "creditUrl": "https://unsplash.com/@newpowa"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "How LFP Chemistry Works",
+      "id": "lfp-chemistry"
+    },
+    {
+      "type": "paragraph",
+      "text": "LFP batteries use a cathode of lithium iron phosphate (LiFePO4) bonded in an olivine crystal structure. The iron-phosphate bond is extremely stable -- it requires significantly more energy to break than the nickel-oxide bonds in NMC batteries. This inherent chemical stability is the primary reason LFP batteries are considered the safest lithium battery chemistry for residential use."
+    },
+    {
+      "type": "paragraph",
+      "text": "The trade-off is a lower nominal voltage per cell (3.2V vs 3.7V for NMC) and lower energy density (90-160 Wh/kg vs 150-270 Wh/kg for NMC). In practical terms, an LFP battery storing the same amount of energy as an NMC battery will be **30-50% larger and heavier**. For stationary home storage, this trade-off is usually acceptable."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Performance Profile",
+      "id": "lfp-performance"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Energy density**: 90-160 Wh/kg (lower than NMC, but improving)",
+        "**Cycle life**: 3,000-10,000+ cycles at 80% DOD (far exceeds NMC)",
+        "**Round-trip efficiency**: 90-99% (excellent)",
+        "**Depth of discharge**: 100% usable with minimal impact on lifespan",
+        "**Operating temperature**: -20 to 60 degrees C (wider range than NMC)",
+        "**Calendar life**: 10-20+ years (often outlasts the solar panels)",
+        "**Self-discharge**: 1-3% per month (lower than NMC)",
+        "**Thermal runaway risk**: Extremely low -- LFP does not decompose into oxygen when overheated"
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "tip",
+      "title": "The Cycle Life Advantage",
+      "text": "A battery rated for 5,000 cycles at one cycle per day will last approximately 13.7 years. An LFP battery rated for 10,000 cycles could theoretically last 27 years -- longer than the solar panels themselves. This makes LFP the clear winner for daily-cycling applications like solar self-consumption and time-of-use arbitrage."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Notable Products",
+      "id": "lfp-products"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**EcoFlow DELTA Pro Ultra**: 6 kWh modular, expandable to 36 kWh, ~$5,799",
+        "**Battle Born BB10012**: 1.28 kWh, drop-in 12V replacement, ~$925",
+        "**SOK SK12V206P**: 2.64 kWh, 200A BMS, low-temp protection, ~$460",
+        "**Renogy 200Ah Smart LFP**: 2.56 kWh, Bluetooth monitoring, self-heating, ~$600",
+        "**Victron Smart Lithium 200Ah**: 2.56 kWh, premium ecosystem integration, ~$1,900"
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Lead-Acid Batteries",
+      "id": "lead-acid"
+    },
+    {
+      "type": "paragraph",
+      "text": "Lead-acid batteries are the oldest rechargeable battery technology, invented in 1859 by French physicist Gaston Plante. They powered the off-grid solar industry for decades before lithium alternatives became affordable. While they are being rapidly displaced by lithium in new installations, lead-acid still holds a niche for extremely budget-constrained projects and as a proven technology with well-understood behavior."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Types of Lead-Acid Batteries",
+      "id": "lead-acid-types"
+    },
+    {
+      "type": "paragraph",
+      "text": "There are two main sub-types used in solar applications:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Flooded Lead-Acid (FLA)**: The traditional design with liquid sulfuric acid electrolyte. Requires periodic watering and equalization charging. Produces hydrogen gas during charging and must be installed in a ventilated area. Examples include the Trojan T-105 and Rolls Surrette S-550.",
+        "**Sealed Lead-Acid / AGM (Absorbed Glass Mat)**: Uses a fiberglass mat saturated with electrolyte, eliminating the need for watering. Maintenance-free and can be mounted in any orientation. Slightly more expensive than flooded but much more convenient. Examples include the VMAXTANKS V35-857 and Universal UB121000."
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Performance Profile",
+      "id": "lead-acid-performance"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Energy density**: 30-50 Wh/kg (3-5x lower than lithium)",
+        "**Cycle life**: 500-1,400 cycles at 50% DOD (must limit to 50% to preserve lifespan)",
+        "**Round-trip efficiency**: 75-85% (significant energy lost as heat)",
+        "**Depth of discharge**: Limited to 50% -- using more drastically shortens life",
+        "**Operating temperature**: -20 to 50 degrees C (performance drops sharply in cold)",
+        "**Calendar life**: 3-7 years (regardless of cycling)",
+        "**Self-discharge**: 5-15% per month (highest of all three chemistries)",
+        "**Maintenance**: FLA requires monthly watering and equalization; AGM is maintenance-free"
+      ]
+    },
+    {
+      "type": "callout",
+      "variant": "important",
+      "title": "The 50% Rule",
+      "text": "Lead-acid batteries should never be discharged below 50% state of charge in regular use. This means a 10 kWh lead-acid battery bank only provides 5 kWh of usable energy. When comparing to lithium batteries (which offer 80-100% usable capacity), you need roughly double the rated capacity in lead-acid to match the same usable storage."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Total Cost of Ownership",
+      "id": "lead-acid-tco"
+    },
+    {
+      "type": "paragraph",
+      "text": "While lead-acid batteries cost 50-70% less upfront per kWh of rated capacity, their true cost becomes clear when you factor in: (1) only 50% usable capacity, (2) 3-7 year replacement cycles, and (3) lower round-trip efficiency. Over a 20-year period, a lead-acid system typically costs **2-3x more per usable kWh stored** than an equivalent LFP system."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Head-to-Head Comparison",
+      "id": "head-to-head"
+    },
+    {
+      "type": "spec-table",
+      "title": "Battery Chemistry Comparison Table",
+      "headers": [
+        "Specification",
+        "NMC/NCA Li-ion",
+        "LFP (LiFePO4)",
+        "Lead-Acid (FLA/AGM)"
+      ],
+      "rows": [
+        ["Energy Density", "150-270 Wh/kg", "90-160 Wh/kg", "30-50 Wh/kg"],
+        [
+          "Cycle Life (80% DOD)",
+          "3,000-6,000",
+          "3,000-10,000+",
+          "500-1,400 (at 50% DOD)"
+        ],
+        ["Usable Capacity", "80-100%", "100%", "50% (to preserve life)"],
+        ["Round-Trip Efficiency", "85-97%", "90-99%", "75-85%"],
+        [
+          "Thermal Runaway Risk",
+          "Moderate",
+          "Very Low",
+          "Low (but acid/gas hazards)"
+        ],
+        ["Weight (per kWh)", "~5-7 kg", "~7-10 kg", "~25-35 kg"],
+        ["Calendar Life", "10-15 years", "10-20+ years", "3-7 years"],
+        ["Upfront Cost/kWh", "$400-900", "$150-750", "$100-350"],
+        ["Lifetime Cost/kWh stored", "$0.10-0.25", "$0.05-0.15", "$0.15-0.40"],
+        ["Maintenance", "None", "None", "Monthly (FLA) / None (AGM)"],
+        [
+          "Recyclability",
+          "Moderate (improving)",
+          "Good",
+          "Excellent (99% recycled)"
+        ]
+      ]
+    },
+    {
+      "type": "comparison",
+      "title": "Which Battery Chemistry Should You Choose?",
+      "items": [
+        {
+          "name": "NMC/NCA Lithium-Ion",
+          "pros": [
+            "Highest energy density (smallest footprint)",
+            "Proven technology with major brand backing",
+            "Integrated inverter options available",
+            "Excellent smart energy management software"
+          ],
+          "cons": [
+            "Higher thermal runaway risk than LFP",
+            "Shorter cycle life than LFP",
+            "Contains cobalt (ethical sourcing concerns)",
+            "Degradation accelerates in high heat"
+          ],
+          "bestFor": "Space-constrained installations needing maximum storage in minimum footprint"
+        },
+        {
+          "name": "LFP (LiFePO4)",
+          "pros": [
+            "Safest lithium chemistry",
+            "Longest cycle life (up to 10,000+)",
+            "100% depth of discharge",
+            "Cobalt-free and environmentally friendlier",
+            "Lowest lifetime cost per kWh stored"
+          ],
+          "cons": [
+            "30-50% larger and heavier than NMC",
+            "Fewer integrated smart home products",
+            "Lower energy density",
+            "Cold weather charging limitations without heating"
+          ],
+          "bestFor": "Most home solar storage, daily cycling, off-grid systems, and safety-conscious buyers"
+        },
+        {
+          "name": "Lead-Acid",
+          "pros": [
+            "Lowest upfront cost",
+            "Proven technology (160+ years)",
+            "Nearly 100% recyclable",
+            "Widely available everywhere",
+            "No fire risk from thermal runaway"
+          ],
+          "cons": [
+            "Only 50% usable capacity",
+            "Heavy (3-5x heavier than lithium per kWh)",
+            "3-7 year lifespan requiring replacement",
+            "Flooded type needs regular maintenance",
+            "Highest lifetime cost per kWh stored"
+          ],
+          "bestFor": "Very tight budgets, temporary installations, and projects where 99% recyclability matters"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "The Verdict: LFP Is the New Standard",
+      "id": "verdict"
+    },
+    {
+      "type": "paragraph",
+      "text": "For the vast majority of home solar storage installations in 2025-2026, **LFP batteries represent the best value proposition**. Their combination of safety, longevity, 100% usable capacity, and rapidly declining costs makes them the clear winner for daily solar self-consumption and backup power."
+    },
+    {
+      "type": "paragraph",
+      "text": "NMC lithium-ion remains relevant for buyers who need maximum storage in the smallest possible space -- such as apartment dwellers or installations where wall space is severely limited. The integrated inverter solutions from Tesla and Enphase also make NMC attractive for homeowners who value a polished, all-in-one ecosystem."
+    },
+    {
+      "type": "paragraph",
+      "text": "Lead-acid should only be considered for very small, very budget-constrained projects, or as a temporary solution while saving for a lithium upgrade. The economics of replacement every 3-7 years make lead-acid the most expensive option over a 20-year horizon."
+    },
+    {
+      "type": "quote",
+      "text": "The cheapest battery is not the one with the lowest price tag -- it is the one that delivers the most energy over its entire lifetime at the lowest cost per kilowatt-hour.",
+      "source": "BloombergNEF Energy Storage Outlook"
+    },
+    {
+      "type": "callout",
+      "variant": "tip",
+      "title": "Compare Battery Models",
+      "text": "Use our **System Builder** to select specific battery models, pair them with solar panels, and see how different chemistries affect your overall system ROI and payback period."
+    },
+    {
+      "type": "heading",
+      "level": 2,
+      "text": "Frequently Asked Questions",
+      "id": "faq"
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Can I mix battery chemistries in one system?",
+      "id": "faq-mixing"
+    },
+    {
+      "type": "paragraph",
+      "text": "No. Mixing different battery chemistries in a single bank is not recommended and can be dangerous. Different chemistries have different charge/discharge voltage profiles, and a BMS designed for one chemistry cannot safely manage another. If you want to expand storage, add more batteries of the same type."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "How many cycles do I actually use per year?",
+      "id": "faq-cycles"
+    },
+    {
+      "type": "paragraph",
+      "text": "A typical solar self-consumption system performs one full cycle per day (charge during the day, discharge at night). That equates to 365 cycles per year. A battery rated for 5,000 cycles would last approximately 13.7 years at this rate. Some systems with time-of-use optimization may cycle 1.5-2 times per day, reducing the cycle-based lifespan proportionally."
+    },
+    {
+      "type": "heading",
+      "level": 3,
+      "text": "Are lithium batteries safe for indoor installation?",
+      "id": "faq-safety"
+    },
+    {
+      "type": "paragraph",
+      "text": "LFP batteries are generally considered safe for indoor installation and are approved by most building codes for garage and utility room mounting. NMC batteries may have additional placement restrictions depending on local codes. Lead-acid flooded batteries produce hydrogen gas during charging and must be in a well-ventilated space -- never inside living areas."
+    }
+  ]
+}
