@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Solar and wind energy production calculator with SCADA-validated formulas, region-aware ROI, and curated equipment database. Uses NREL PVWatts methodology and free public APIs (NASA POWER, Open-Meteo).",
   "license": "MIT",
-  "author": "Nayeem Ur Rahman Biswas",
+  "author": "MD Nayeemur Rahman Biswas",
   "repository": {
     "type": "git",
     "url": "https://github.com/Codename-404/green-energy-calculator"

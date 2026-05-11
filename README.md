@@ -4,7 +4,7 @@ Solar and wind energy production estimator with **SCADA-validated formulas**, re
 
 > **Live demo:** _coming soon — deploy URL goes here_
 >
-> **Author:** Nayeem Ur Rahman Biswas — [LinkedIn](https://www.linkedin.com/in/nayeemur-rahman/) · [GitHub](https://github.com/Codename-404)
+> **Author:** MD Nayeemur Rahman Biswas — [LinkedIn](https://www.linkedin.com/in/nayeemur-rahman/) · [GitHub](https://github.com/Codename-404)
 
 <!-- TODO: add screenshot of the wizard at /quick-start once deployed -->
 
@@ -22,10 +22,10 @@ Solar and wind energy production estimator with **SCADA-validated formulas**, re
 
 Most online solar calculators wave their hands at "typical assumptions." This one shows the math, cites the source, and validates against real plant data:
 
-| Formula | Validated against | Result |
-|---|---|---|
-| Wind power curve `P = 0.5 × ρ × A × v³ × Cp × η` | 10-min SCADA from a 3.6 MW onshore turbine (~50k data points, 3-25 m/s range) | **-0.7% bias overall**, RMSE < 3% in mid-range winds |
-| Solar production `E = P_rated × PSH × tiltCorr × tempDerate × (1 - losses)` | 15-min DC/AC readings from a real Indian solar plant (1,634 daytime points) | **-12.9% bias** (most of which is methodological — see [methodology article](src/data/articles/how-we-calculate.json)) |
+| Formula                                                                     | Validated against                                                             | Result                                                                                                                 |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Wind power curve `P = 0.5 × ρ × A × v³ × Cp × η`                            | 10-min SCADA from a 3.6 MW onshore turbine (~50k data points, 3-25 m/s range) | **-0.7% bias overall**, RMSE < 3% in mid-range winds                                                                   |
+| Solar production `E = P_rated × PSH × tiltCorr × tempDerate × (1 - losses)` | 15-min DC/AC readings from a real Indian solar plant (1,634 daytime points)   | **-12.9% bias** (most of which is methodological — see [methodology article](src/data/articles/how-we-calculate.json)) |
 
 The full validation scripts live in [`scripts/validate/`](scripts/validate/) — anyone can rerun them against the source datasets.
 
@@ -66,12 +66,12 @@ src/
 
 ## Data sources
 
-| Source | What it provides | Cost |
-|---|---|---|
-| [NASA POWER](https://power.larc.nasa.gov/) | Long-term monthly climatology (irradiance, temperature, wind speed) at any lat/lon | Free, no key |
-| [Open-Meteo](https://open-meteo.com/) | Backup weather data, geocoding fallback | Free, no key |
-| [BigDataCloud](https://www.bigdatacloud.com/) | Reverse geocoding (lat/lon → city name) | Free tier, no key |
-| Equipment specs | Hand-curated from manufacturer datasheets | Bundled JSON |
+| Source                                        | What it provides                                                                   | Cost              |
+| --------------------------------------------- | ---------------------------------------------------------------------------------- | ----------------- |
+| [NASA POWER](https://power.larc.nasa.gov/)    | Long-term monthly climatology (irradiance, temperature, wind speed) at any lat/lon | Free, no key      |
+| [Open-Meteo](https://open-meteo.com/)         | Backup weather data, geocoding fallback                                            | Free, no key      |
+| [BigDataCloud](https://www.bigdatacloud.com/) | Reverse geocoding (lat/lon → city name)                                            | Free tier, no key |
+| Equipment specs                               | Hand-curated from manufacturer datasheets                                          | Bundled JSON      |
 
 ## Setup
 
