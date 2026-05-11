@@ -1,4 +1,4 @@
-import type { WritableAtom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
 import {
   solarInputModeAtom,
   solarTechnologyAtom,
@@ -29,11 +29,13 @@ import {
 // Types
 // ---------------------------------------------------------------------------
 
+type WAtom<T> = PrimitiveAtom<T>;
+
 export interface ParamConfig<T = unknown> {
   /** Short URL key */
   key: string;
   /** Jotai atom to sync */
-  atom: WritableAtom<T, [T], void>;
+  atom: WAtom<T>;
   /** Default value — if atom matches, omit from URL */
   defaultValue: T;
   /** Serialize atom value to URL string */
@@ -46,16 +48,23 @@ export interface ParamConfig<T = unknown> {
 
 export type CalculatorType = "solar" | "wind";
 
+// `ParamConfig` is invariant in T because T appears in both producer and
+// consumer positions (atom write, serialize input). The factory helpers
+// preserve the per-entry type, so the upcast to `ParamConfig<unknown>` at
+// array-assembly time is safe — each entry's atom + serialize + deserialize
+// always agree on the same concrete T at runtime.
+type AnyParamConfig = ParamConfig<unknown>;
+const erase = <T>(c: ParamConfig<T>): AnyParamConfig => c as AnyParamConfig;
+
 // ---------------------------------------------------------------------------
 // Factory helpers
 // ---------------------------------------------------------------------------
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 function numberParam(
   key: string,
-  atom: any,
+  atom: WAtom<number>,
   defaultValue: number,
-  opts?: { min?: number; max?: number; decimals?: number }
+  opts?: { min?: number; max?: number; decimals?: number },
 ): ParamConfig<number> {
   const { min, max, decimals } = opts ?? {};
   return {
@@ -77,9 +86,9 @@ function numberParam(
 
 function enumParam<T extends string>(
   key: string,
-  atom: any,
+  atom: WAtom<T>,
   defaultValue: T,
-  validValues: readonly T[]
+  validValues: readonly T[],
 ): ParamConfig<T> {
   return {
     key,
@@ -93,7 +102,7 @@ function enumParam<T extends string>(
 
 function nullableStringParam(
   key: string,
-  atom: any
+  atom: WAtom<string | null>,
 ): ParamConfig<string | null> {
   return {
     key,
@@ -103,66 +112,80 @@ function nullableStringParam(
     deserialize: (raw) => (raw ? raw : null),
   };
 }
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 // ---------------------------------------------------------------------------
 // Per-calculator configs
 // ---------------------------------------------------------------------------
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const SOLAR_CONFIGS: ParamConfig<any>[] = [
-  enumParam("m", solarInputModeAtom, "technology", [
-    "technology",
-    "product",
-  ] as const),
-  enumParam("t", solarTechnologyAtom, "monocrystalline", [
-    "monocrystalline",
-    "polycrystalline",
-    "thin-film",
-    "bifacial",
-  ] as const),
-  numberParam("w", solarWattageTierAtom, 400, { min: 100, max: 800 }),
-  nullableStringParam("pid", selectedPanelIdAtom),
-  numberParam("n", panelCountAtom, DEFAULT_PANEL_COUNT, { min: 1, max: 100 }),
-  numberParam("tl", tiltAngleAtom, DEFAULT_TILT_ANGLE, { min: 0, max: 90 }),
-  numberParam("az", azimuthAtom, DEFAULT_AZIMUTH, { min: 0, max: 360 }),
-  numberParam("sf", shadingFactorAtom, DEFAULT_SHADING_FACTOR, {
-    min: 0,
-    max: 1,
-    decimals: 2,
-  }),
-  numberParam("sl", systemLossesAtom, DEFAULT_SYSTEM_LOSSES, {
-    min: 0,
-    max: 0.5,
-    decimals: 2,
-  }),
+const SOLAR_CONFIGS: AnyParamConfig[] = [
+  erase(
+    enumParam("m", solarInputModeAtom, "technology", [
+      "technology",
+      "product",
+    ] as const),
+  ),
+  erase(
+    enumParam("t", solarTechnologyAtom, "monocrystalline", [
+      "monocrystalline",
+      "polycrystalline",
+      "thin-film",
+      "bifacial",
+    ] as const),
+  ),
+  erase(numberParam("w", solarWattageTierAtom, 400, { min: 100, max: 800 })),
+  erase(nullableStringParam("pid", selectedPanelIdAtom)),
+  erase(
+    numberParam("n", panelCountAtom, DEFAULT_PANEL_COUNT, { min: 1, max: 100 }),
+  ),
+  erase(
+    numberParam("tl", tiltAngleAtom, DEFAULT_TILT_ANGLE, { min: 0, max: 90 }),
+  ),
+  erase(
+    numberParam("az", azimuthAtom, DEFAULT_AZIMUTH, { min: 0, max: 360 }),
+  ),
+  erase(
+    numberParam("sf", shadingFactorAtom, DEFAULT_SHADING_FACTOR, {
+      min: 0,
+      max: 1,
+      decimals: 2,
+    }),
+  ),
+  erase(
+    numberParam("sl", systemLossesAtom, DEFAULT_SYSTEM_LOSSES, {
+      min: 0,
+      max: 0.5,
+      decimals: 2,
+    }),
+  ),
 ];
 
-const WIND_CONFIGS: ParamConfig<any>[] = [
-  enumParam("m", windInputModeAtom, "technology", [
-    "technology",
-    "product",
-  ] as const),
-  enumParam("t", windTurbineTypeAtom, "hawt", ["hawt", "vawt"] as const),
-  numberParam("w", windPowerTierAtom, 5000, { min: 100, max: 100000 }),
-  nullableStringParam("pid", selectedTurbineIdAtom),
-  numberParam("n", turbineCountAtom, 1, { min: 1, max: 50 }),
-  numberParam("hh", hubHeightAtom, 30, { min: 5, max: 200 }),
-  enumParam("tr", terrainTypeAtom, "suburban", [
-    "open",
-    "suburban",
-    "urban",
-    "coastal",
-  ] as const),
+const WIND_CONFIGS: AnyParamConfig[] = [
+  erase(
+    enumParam("m", windInputModeAtom, "technology", [
+      "technology",
+      "product",
+    ] as const),
+  ),
+  erase(enumParam("t", windTurbineTypeAtom, "hawt", ["hawt", "vawt"] as const)),
+  erase(numberParam("w", windPowerTierAtom, 5000, { min: 100, max: 100000 })),
+  erase(nullableStringParam("pid", selectedTurbineIdAtom)),
+  erase(numberParam("n", turbineCountAtom, 1, { min: 1, max: 50 })),
+  erase(numberParam("hh", hubHeightAtom, 30, { min: 5, max: 200 })),
+  erase(
+    enumParam("tr", terrainTypeAtom, "suburban", [
+      "open",
+      "suburban",
+      "urban",
+      "coastal",
+    ] as const),
+  ),
 ];
 
-const CONFIG_MAP: Record<CalculatorType, ParamConfig<any>[]> = {
+const CONFIG_MAP: Record<CalculatorType, AnyParamConfig[]> = {
   solar: SOLAR_CONFIGS,
   wind: WIND_CONFIGS,
 };
 
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-export function getParamConfigs(type: CalculatorType): ParamConfig<any>[] {
+export function getParamConfigs(type: CalculatorType): AnyParamConfig[] {
   return CONFIG_MAP[type];
 }
