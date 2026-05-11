@@ -23,7 +23,7 @@ import {
  */
 export function calculateWindProduction(
   input: WindCalculationInput,
-  solarData: SolarIrradianceData // reuses NASA data which includes wind speed
+  weather: SolarIrradianceData,
 ): WindCalculationResult {
   const {
     turbineRatedPower,
@@ -47,11 +47,11 @@ export function calculateWindProduction(
   const terrainCorrection = WIND_TERRAIN_SPEED_CORRECTIONS[terrainType] ?? 1.0;
 
   // Adjust air density for approximate elevation
-  const elevation = solarData.location.elevation;
+  const elevation = weather.location.elevation;
   const airDensity =
     AIR_DENSITY_SEA_LEVEL * Math.exp(-elevation / 8500);
 
-  const monthlyBreakdown = solarData.monthly.map((monthData, i) => {
+  const monthlyBreakdown = weather.monthly.map((monthData, i) => {
     // Apply terrain correction to NASA 2m data, then extrapolate to hub height
     const windSpeedRef = monthData.windSpeed * terrainCorrection;
     const windSpeedHub =
