@@ -72,23 +72,18 @@ export function WizardStepper({
                   )}
                 </div>
 
-                {/* Label + description */}
-                <div className="min-w-0 text-left">
-                  <p
-                    className={`text-sm font-semibold leading-tight ${
-                      isActive
-                        ? "text-green-700 dark:text-green-400"
-                        : isCompleted
-                          ? "text-foreground"
-                          : "text-muted-foreground/60"
-                    }`}
-                  >
-                    {step.label}
-                  </p>
-                  <p className="text-xs text-muted-foreground/60 hidden lg:block">
-                    {step.description}
-                  </p>
-                </div>
+                {/* Label */}
+                <p
+                  className={`text-sm font-semibold leading-tight ${
+                    isActive
+                      ? "text-green-700 dark:text-green-400"
+                      : isCompleted
+                        ? "text-foreground"
+                        : "text-muted-foreground/60"
+                  }`}
+                >
+                  {step.label}
+                </p>
               </button>
 
               {/* Connector line */}
@@ -152,7 +147,6 @@ export function WizardStepper({
         {/* Current step label */}
         <p className="mt-2 text-center text-sm font-medium text-green-700 dark:text-green-400">
           {steps[currentStep].label}
-          <span className="text-muted-foreground"> — {steps[currentStep].description}</span>
         </p>
       </div>
     </nav>

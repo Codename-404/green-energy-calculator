@@ -3,6 +3,7 @@ import { Nunito, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/layout/providers";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import "leaflet/dist/leaflet.css";
 import "./globals.css";
 
 const nunito = Nunito({

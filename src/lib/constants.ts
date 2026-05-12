@@ -20,23 +20,28 @@ export interface RegionInfo {
   defaultRate: number; // default electricity rate
   co2PerKwh: number; // kg CO2 per kWh grid electricity
   taxCreditRate: number; // investment tax credit (0-1)
+  /** Representative center for map default view */
+  centerLat: number;
+  centerLng: number;
+  /** Default zoom for region-wide view (lower = wider) */
+  centerZoom: number;
 }
 
 export const REGIONS = {
   // Americas
-  us: { label: "United States", group: "Americas", currency: "USD", currencySymbol: "$", defaultRate: 0.16, co2PerKwh: 0.417, taxCreditRate: 0.30 },
-  ca: { label: "Canada", group: "Americas", currency: "CAD", currencySymbol: "C$", defaultRate: 0.13, co2PerKwh: 0.120, taxCreditRate: 0 },
-  latam: { label: "Latin America & Caribbean", group: "Americas", currency: "USD", currencySymbol: "$", defaultRate: 0.12, co2PerKwh: 0.200, taxCreditRate: 0 },
+  us: { label: "United States", group: "Americas", currency: "USD", currencySymbol: "$", defaultRate: 0.16, co2PerKwh: 0.417, taxCreditRate: 0.30, centerLat: 39.5, centerLng: -98.35, centerZoom: 4 },
+  ca: { label: "Canada", group: "Americas", currency: "CAD", currencySymbol: "C$", defaultRate: 0.13, co2PerKwh: 0.120, taxCreditRate: 0, centerLat: 56.13, centerLng: -106.35, centerZoom: 3 },
+  latam: { label: "Latin America & Caribbean", group: "Americas", currency: "USD", currencySymbol: "$", defaultRate: 0.12, co2PerKwh: 0.200, taxCreditRate: 0, centerLat: -8.78, centerLng: -55.49, centerZoom: 3 },
   // Europe
-  eu: { label: "European Union", group: "Europe", currency: "EUR", currencySymbol: "€", defaultRate: 0.25, co2PerKwh: 0.276, taxCreditRate: 0 },
-  uk: { label: "United Kingdom", group: "Europe", currency: "GBP", currencySymbol: "£", defaultRate: 0.28, co2PerKwh: 0.233, taxCreditRate: 0 },
+  eu: { label: "European Union", group: "Europe", currency: "EUR", currencySymbol: "€", defaultRate: 0.25, co2PerKwh: 0.276, taxCreditRate: 0, centerLat: 50.85, centerLng: 9.6, centerZoom: 4 },
+  uk: { label: "United Kingdom", group: "Europe", currency: "GBP", currencySymbol: "£", defaultRate: 0.28, co2PerKwh: 0.233, taxCreditRate: 0, centerLat: 54.5, centerLng: -2.5, centerZoom: 5 },
   // Asia & Pacific
-  east_asia: { label: "East Asia", group: "Asia & Pacific", currency: "USD", currencySymbol: "$", defaultRate: 0.15, co2PerKwh: 0.555, taxCreditRate: 0 },
-  south_se_asia: { label: "South & Southeast Asia", group: "Asia & Pacific", currency: "USD", currencySymbol: "$", defaultRate: 0.08, co2PerKwh: 0.650, taxCreditRate: 0 },
-  oceania: { label: "Australia & Oceania", group: "Asia & Pacific", currency: "AUD", currencySymbol: "A$", defaultRate: 0.25, co2PerKwh: 0.656, taxCreditRate: 0 },
+  east_asia: { label: "East Asia", group: "Asia & Pacific", currency: "USD", currencySymbol: "$", defaultRate: 0.15, co2PerKwh: 0.555, taxCreditRate: 0, centerLat: 35.0, centerLng: 115.0, centerZoom: 3 },
+  south_se_asia: { label: "South & Southeast Asia", group: "Asia & Pacific", currency: "USD", currencySymbol: "$", defaultRate: 0.08, co2PerKwh: 0.650, taxCreditRate: 0, centerLat: 12.0, centerLng: 100.0, centerZoom: 3 },
+  oceania: { label: "Australia & Oceania", group: "Asia & Pacific", currency: "AUD", currencySymbol: "A$", defaultRate: 0.25, co2PerKwh: 0.656, taxCreditRate: 0, centerLat: -25.27, centerLng: 133.78, centerZoom: 4 },
   // Middle East & Africa
-  mena: { label: "Middle East & North Africa", group: "Middle East & Africa", currency: "USD", currencySymbol: "$", defaultRate: 0.05, co2PerKwh: 0.500, taxCreditRate: 0 },
-  africa: { label: "Sub-Saharan Africa", group: "Middle East & Africa", currency: "USD", currencySymbol: "$", defaultRate: 0.10, co2PerKwh: 0.480, taxCreditRate: 0 },
+  mena: { label: "Middle East & North Africa", group: "Middle East & Africa", currency: "USD", currencySymbol: "$", defaultRate: 0.05, co2PerKwh: 0.500, taxCreditRate: 0, centerLat: 27.0, centerLng: 30.0, centerZoom: 3 },
+  africa: { label: "Sub-Saharan Africa", group: "Middle East & Africa", currency: "USD", currencySymbol: "$", defaultRate: 0.10, co2PerKwh: 0.480, taxCreditRate: 0, centerLat: -1.0, centerLng: 21.0, centerZoom: 3 },
 } as const satisfies Record<string, RegionInfo>;
 
 export type RegionKey = keyof typeof REGIONS;

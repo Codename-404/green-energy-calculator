@@ -2,17 +2,13 @@
 
 import { useAtom, useAtomValue } from "jotai";
 import { useCallback } from "react";
+import dynamic from "next/dynamic";
+import { MapPin, MousePointerClick } from "lucide-react";
 import { locationAtom, quickStartCountryAtom } from "@/store/atoms";
 import { REGIONS } from "@/lib/constants";
 import type { RegionKey } from "@/lib/constants";
 import { LocationInput } from "@/components/calculator/location-input";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { usePickLocation } from "@/hooks/use-pick-location";
 import {
   Select,
   SelectTrigger,
@@ -24,7 +20,17 @@ import {
   SelectSeparator,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { MapPin } from "lucide-react";
+
+const LocationMap = dynamic(
+  () =>
+    import("@/components/calculator/location-map").then((m) => m.LocationMap),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-64 w-full animate-pulse rounded-lg border bg-muted" />
+    ),
+  },
+);
 
 const REGION_GROUPS = Object.entries(REGIONS).reduce(
   (groups, [key, info]) => {
@@ -39,6 +45,7 @@ const REGION_GROUPS = Object.entries(REGIONS).reduce(
 export function StepLocation() {
   const location = useAtomValue(locationAtom);
   const [country, setCountry] = useAtom(quickStartCountryAtom);
+  const pickLocation = usePickLocation();
 
   const handleCountryChange = useCallback(
     (value: string | null) => {
@@ -48,63 +55,84 @@ export function StepLocation() {
     [setCountry],
   );
 
+  const region = REGIONS[country];
+
+  const centerLat = location?.coordinates.latitude ?? region.centerLat;
+  const centerLng = location?.coordinates.longitude ?? region.centerLng;
+  const zoom = location ? 11 : region.centerZoom;
+
   return (
-    <Card className="mx-auto max-w-2xl">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <div className="space-y-6">
+      <header className="space-y-2">
+        <h2 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
           <MapPin className="size-5 text-green-600" />
           Where will you install this?
-        </CardTitle>
-        <CardDescription>
-          We use your location to fetch real solar irradiance data — sunnier
-          spots need fewer panels. Your region sets electricity rates and
-          incentives for savings estimates.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <section aria-label="Location settings">
-          <LocationInput />
-        </section>
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          We pull sun data for your spot and use the region for electricity
+          rates and incentives.
+        </p>
+      </header>
 
-        {location && (
-          <p className="text-sm text-muted-foreground">
-            Detected: {location.displayName}
+      <section aria-label="Location search">
+        <LocationInput />
+      </section>
+
+      <div className="space-y-2">
+        <LocationMap
+          lat={location?.coordinates.latitude ?? null}
+          lng={location?.coordinates.longitude ?? null}
+          centerLat={centerLat}
+          centerLng={centerLng}
+          zoom={zoom}
+          label={location?.displayName}
+          onPick={pickLocation}
+        />
+        {!location && (
+          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <MousePointerClick className="size-3.5" />
+            Click anywhere on the map to drop a pin.
           </p>
         )}
+      </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="country-select">Region</Label>
-          <Select value={country} onValueChange={handleCountryChange}>
-            <SelectTrigger className="w-full" aria-label="Select region">
-              <SelectValue placeholder="Select region" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(REGION_GROUPS).map(
-                ([groupName, keys], groupIdx) => (
-                  <SelectGroup key={groupName}>
-                    {groupIdx > 0 && <SelectSeparator />}
-                    <SelectLabel>{groupName}</SelectLabel>
-                    {keys.map((key) => (
-                      <SelectItem
-                        key={key}
-                        value={key}
-                        label={REGIONS[key].label}
-                      >
-                        {REGIONS[key].label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                ),
-              )}
-            </SelectContent>
-          </Select>
-          <p className="text-xs text-muted-foreground">
-            Electricity rate: {REGIONS[country].currencySymbol}
-            {REGIONS[country].defaultRate.toFixed(2)}/kWh · Incentive:{" "}
-            {(REGIONS[country].taxCreditRate * 100).toFixed(0)}%
-          </p>
-        </div>
-      </CardContent>
-    </Card>
+      <div className="space-y-2">
+        <Label htmlFor="country-select">Region</Label>
+        <Select value={country} onValueChange={handleCountryChange}>
+          <SelectTrigger
+            id="country-select"
+            className="w-full"
+            aria-label="Select region"
+          >
+            <SelectValue placeholder="Select region">{region.label}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {Object.entries(REGION_GROUPS).map(
+              ([groupName, keys], groupIdx) => (
+                <SelectGroup key={groupName}>
+                  {groupIdx > 0 && <SelectSeparator />}
+                  <SelectLabel>{groupName}</SelectLabel>
+                  {keys.map((key) => (
+                    <SelectItem
+                      key={key}
+                      value={key}
+                      label={REGIONS[key].label}
+                    >
+                      {REGIONS[key].label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              ),
+            )}
+          </SelectContent>
+        </Select>
+        <p className="text-xs text-muted-foreground">
+          Rate: {region.currencySymbol}
+          {region.defaultRate.toFixed(2)}/kWh
+          {region.taxCreditRate > 0 &&
+            ` · Tax credit: ${(region.taxCreditRate * 100).toFixed(0)}%`}
+        </p>
+      </div>
+    </div>
   );
 }

@@ -22,14 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  MapPin,
-  Navigation,
-  Search,
-  Loader2,
-  X,
-  LocateIcon,
-} from "lucide-react";
+import { MapPin, Search, Loader2, X, LocateIcon } from "lucide-react";
 
 export function LocationInput() {
   const [location, setLocation] = useAtom(locationAtom);
@@ -232,10 +225,15 @@ export function LocationInput() {
       {/* Search input row */}
       <div className="flex gap-2">
         <div className="relative flex-1">
+          {searching ? (
+            <Loader2 className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 animate-spin text-muted-foreground" />
+          ) : (
+            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+          )}
           <Input
             id="location-search"
             type="text"
-            placeholder="Enter city or address..."
+            placeholder="City, address, or postcode — press Enter"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -246,22 +244,9 @@ export function LocationInput() {
             aria-autocomplete="list"
             aria-expanded={showResults}
             disabled={searching}
+            className="pl-9"
           />
         </div>
-
-        <Button
-          variant="outline"
-          size="default"
-          onClick={handleSearch}
-          disabled={searching || !query.trim()}
-          aria-label="Search location"
-        >
-          {searching ? (
-            <Loader2 className="size-4 animate-spin" />
-          ) : (
-            <Search className="size-4" />
-          )}
-        </Button>
 
         <Button
           variant="outline"
@@ -269,12 +254,14 @@ export function LocationInput() {
           onClick={handleGps}
           disabled={gpsLoading}
           aria-label="Use my current location"
+          className="gap-2"
         >
           {gpsLoading ? (
             <Loader2 className="size-4 animate-spin" />
           ) : (
             <LocateIcon className="size-4" />
           )}
+          <span className="hidden sm:inline">Use my location</span>
         </Button>
       </div>
 

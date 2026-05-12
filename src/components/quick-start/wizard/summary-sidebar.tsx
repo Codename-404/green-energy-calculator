@@ -69,20 +69,22 @@ export function SummarySidebar() {
             <MapPin className="mt-0.5 size-3.5 shrink-0 text-muted-foreground" />
             <span className="flex-1">
               {location?.displayName ?? (
-                <span className="text-muted-foreground">Not set</span>
+                <span className="italic text-muted-foreground/60">
+                  Pick a spot on the next step
+                </span>
               )}
             </span>
           </div>
-          <Row
-            icon={null}
-            label="Region"
-            value={region.label}
-          />
-          <Row
-            icon={null}
-            label="Rate"
-            value={`${region.currencySymbol}${region.defaultRate.toFixed(2)}/kWh`}
-          />
+          {location && (
+            <>
+              <Row icon={null} label="Region" value={region.label} />
+              <Row
+                icon={null}
+                label="Rate"
+                value={`${region.currencySymbol}${region.defaultRate.toFixed(2)}/kWh`}
+              />
+            </>
+          )}
         </section>
 
         <Separator />

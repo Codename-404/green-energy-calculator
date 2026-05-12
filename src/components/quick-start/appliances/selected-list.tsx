@@ -45,7 +45,7 @@ export function SelectedList() {
   return (
     <Card>
       <CardContent className="p-0">
-        <ul className="divide-y">
+        <ul className="max-h-[55vh] divide-y overflow-y-auto">
           {activeSelections.map((sel) => {
             const a = APPLIANCE_BY_ID[sel.applianceId];
             if (!a) return null;

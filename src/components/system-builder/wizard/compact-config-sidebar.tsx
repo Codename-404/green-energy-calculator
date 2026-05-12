@@ -186,7 +186,7 @@ export function CompactConfigSidebar({ onReconfigure }: CompactConfigSidebarProp
                 onValueChange={handleCountryChange}
               >
                 <SelectTrigger className="h-8 text-xs" aria-label="Select region">
-                  <SelectValue />
+                  <SelectValue>{regionInfo.label}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(REGION_GROUPS).map(([groupName, keys], groupIdx) => (

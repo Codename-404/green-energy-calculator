@@ -4,6 +4,8 @@ import { Plug, MapPin, Sliders, BarChart3 } from "lucide-react";
 import { useAtomValue } from "jotai";
 import { applianceSelectionsAtom, customAppliancesAtom } from "@/store/atoms";
 import { useWizard, type WizardStep } from "@/hooks/use-wizard";
+import { useQuickStartUrlSync } from "@/hooks/use-quickstart-url-sync";
+import { useLocationHydration } from "@/hooks/use-location-hydration";
 import { WizardStepper } from "@/components/system-builder/wizard/wizard-stepper";
 import { WizardNavigation } from "@/components/system-builder/wizard/wizard-navigation";
 import { StepAppliances } from "@/components/quick-start/wizard/step-appliances";
@@ -28,13 +30,19 @@ interface QuickStartClientProps {
 
 export function QuickStartClient({ marketing }: QuickStartClientProps = {}) {
   const wizard = useWizard(0, QUICK_START_STEPS);
+  const { isHydrated, urlLat, urlLng } = useQuickStartUrlSync({
+    step: wizard.currentStep,
+    setStep: wizard.goToStep,
+  });
+  useLocationHydration(urlLat, urlLng, isHydrated);
   const selections = useAtomValue(applianceSelectionsAtom);
   const customAppliances = useAtomValue(customAppliancesAtom);
 
   const isStep0 = wizard.currentStep === 0;
   const activeCount =
     selections.filter((s) => s.quantity > 0).length + customAppliances.length;
-  const showMarketing = Boolean(marketing) && isStep0 && activeCount === 0;
+  const isStep0Empty = isStep0 && activeCount === 0;
+  const showMarketing = Boolean(marketing) && isStep0Empty;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -48,25 +56,30 @@ export function QuickStartClient({ marketing }: QuickStartClientProps = {}) {
         </div>
       )}
 
-      <div className={cn(isStep0 && "mx-auto max-w-2xl")}>
-        <WizardStepper
-          steps={wizard.steps}
-          currentStep={wizard.currentStep}
-          visitedSteps={wizard.visitedSteps}
-          onStepClick={wizard.goToStep}
-          canNavigateTo={wizard.canNavigateTo}
-          icons={STEP_ICONS}
-          ariaLabel="Quick start steps"
-        />
-      </div>
+      {!isStep0Empty && (
+        <div className={cn(isStep0 && "mx-auto max-w-2xl")}>
+          <WizardStepper
+            steps={wizard.steps}
+            currentStep={wizard.currentStep}
+            visitedSteps={wizard.visitedSteps}
+            onStepClick={wizard.goToStep}
+            canNavigateTo={wizard.canNavigateTo}
+            icons={STEP_ICONS}
+            ariaLabel="Quick start steps"
+          />
+        </div>
+      )}
 
       <div
         className={cn(
-          "mt-8 grid gap-6",
-          isStep0 ? "mx-auto max-w-2xl" : "lg:grid-cols-[1fr_280px]",
+          "grid gap-6",
+          !isStep0Empty && "mt-8",
+          isStep0
+            ? "mx-auto max-w-2xl"
+            : "lg:grid-cols-[minmax(0,1fr)_280px]",
         )}
       >
-        <div>
+        <div className="min-w-0">
           {wizard.currentStep === 0 && <StepAppliances />}
           {wizard.currentStep === 1 && <StepLocation />}
           {wizard.currentStep === 2 && <StepPreferences />}
@@ -78,6 +91,8 @@ export function QuickStartClient({ marketing }: QuickStartClientProps = {}) {
             isNextResults={wizard.currentStep === QUICK_START_STEPS.length - 2}
             onBack={wizard.goBack}
             onNext={wizard.goNext}
+            prominent={isStep0}
+            nextDisabled={isStep0 && activeCount === 0}
           />
         </div>
 
