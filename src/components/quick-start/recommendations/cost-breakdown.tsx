@@ -15,6 +15,24 @@ function money(n: number, sym: string) {
   return `${sym}${Math.round(n).toLocaleString()}`;
 }
 
+function k(n: number) {
+  if (n < 1000) return Math.round(n).toString();
+  return `${(n / 1000).toFixed(1)}k`;
+}
+
+/**
+ * Cost is shown as a ±15% range to signal that our static price data
+ * is indicative — real installed cost varies by installer, permitting,
+ * and regional labor rates. A point estimate would read like a quote.
+ */
+function moneyRange(n: number, sym: string) {
+  if (!Number.isFinite(n)) return "—";
+  const lo = n * 0.85;
+  const hi = n * 1.15;
+  // Compact form: "$5.7–7.7k" reads as a range cleanly and fits a card column.
+  return `${sym}${k(lo).replace("k", "")}–${k(hi)}`;
+}
+
 function years(n: number) {
   if (!Number.isFinite(n) || n > 100) return "—";
   return `${n.toFixed(1)} yr`;
@@ -31,14 +49,14 @@ export function CostBreakdown({
     {
       icon: DollarSign,
       label: "System cost",
-      value: money(totalCost, currencySymbol),
-      sub: "before incentives",
+      value: moneyRange(totalCost, currencySymbol),
+      sub: "est. before incentives",
     },
     {
       icon: Banknote,
       label: "Effective cost",
-      value: money(effectiveCost, currencySymbol),
-      sub: "after tax credit",
+      value: moneyRange(effectiveCost, currencySymbol),
+      sub: "est. after tax credit",
     },
     {
       icon: Clock,

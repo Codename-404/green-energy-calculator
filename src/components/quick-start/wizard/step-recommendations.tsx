@@ -77,7 +77,11 @@ export function StepRecommendations() {
           <p className="mt-1 text-sm text-muted-foreground">
             Each bundle covers your{" "}
             <strong>{profile.annualKwh.toFixed(0)} kWh/year</strong> demand in{" "}
-            <strong>{location.displayName}</strong>. Prices in {currencySymbol}.
+            <strong>{location.displayName}</strong>.
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Prices in {currencySymbol} are indicative — actual installed cost
+            varies 20–40% by installer, permitting, and regional labor.
           </p>
         </div>
         <Link
