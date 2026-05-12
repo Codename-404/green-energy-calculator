@@ -138,3 +138,14 @@
     @apply font-sans;
   }
 }
+
+/* Leaflet vs. Tailwind preflight: preflight sets img { max-width: 100% },
+   which squashes tile images and shows a gray grid. Restore tile sizing. */
+.leaflet-container img {
+  max-width: none !important;
+}
+.leaflet-tile {
+  max-width: none !important;
+  width: auto !important;
+  height: auto !important;
+}

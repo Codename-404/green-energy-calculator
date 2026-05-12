@@ -22,6 +22,13 @@ const TIER_STYLES: Record<SolarBundle["tier"], string> = {
   premium: "bg-amber-500/10 text-amber-600",
 };
 
+const TECH_LABEL: Record<string, string> = {
+  monocrystalline: "Monocrystalline",
+  polycrystalline: "Polycrystalline",
+  "thin-film": "Thin-film",
+  bifacial: "Bifacial",
+};
+
 function fmt(n: number, d = 0) {
   return n.toLocaleString(undefined, { maximumFractionDigits: d });
 }
@@ -54,12 +61,11 @@ export function BundleCard({ bundle, currencySymbol = "$", recommended }: Props)
                 </Badge>
               )}
             </div>
-            <CardTitle className="mt-2">
-              {panel.brand} {panel.model}
+            <CardTitle className="mt-2 leading-snug">
+              {TECH_LABEL[panel.technology] ?? panel.technology} {panel.wattage}W panel
             </CardTitle>
             <p className="text-xs text-muted-foreground">
-              {panel.wattage}W · {(panel.efficiency * 100).toFixed(1)}% efficiency ·{" "}
-              {panel.technology}
+              {(panel.efficiency * 100).toFixed(1)}% efficiency · 25-year warranty
             </p>
           </div>
         </div>
@@ -87,9 +93,7 @@ export function BundleCard({ bundle, currencySymbol = "$", recommended }: Props)
           {inverter && (
             <div className="flex items-center gap-2">
               <Zap className="size-3.5 text-primary" />
-              <span className="flex-1">
-                Inverter: {inverter.brand} {inverter.model}
-              </span>
+              <span className="flex-1">String inverter</span>
               <span className="text-muted-foreground tabular-nums">
                 {inverter.ratedPowerW} W
               </span>
@@ -99,7 +103,8 @@ export function BundleCard({ bundle, currencySymbol = "$", recommended }: Props)
             <div className="flex items-center gap-2">
               <BatteryIcon className="size-3.5 text-emerald-500" />
               <span className="flex-1">
-                Battery: {batteryCount} × {battery.brand} {battery.model}
+                {batteryCount} × {battery.capacityKwh} kWh lithium battery
+                {batteryCount > 1 ? " pack" : ""}
               </span>
               <span className="text-muted-foreground tabular-nums">
                 {(battery.capacityKwh * batteryCount).toFixed(1)} kWh

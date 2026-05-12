@@ -17,48 +17,46 @@ import { calculateROI } from "./roi-calculations";
 import { calculateEnvironmentalImpact } from "./environmental-impact";
 import type { RegionKey } from "./constants";
 
-const TIER_TO_TECH: Record<BudgetTier, SolarPanel["technology"]> = {
-  budget: "polycrystalline",
-  balanced: "monocrystalline",
-  premium: "bifacial",
-};
-
 const TIER_LABEL: Record<BudgetTier, string> = {
   budget: "Budget",
   balanced: "Balanced",
   premium: "Premium",
 };
 
-function pickPanelForTier(
-  tier: BudgetTier,
-  country: RegionKey,
-): SolarPanel | null {
-  const tech = TIER_TO_TECH[tier];
+/**
+ * Pick one panel per tier so that **system cost is monotonic**
+ * (budget ≤ balanced ≤ premium). Sort all candidates by $/W ascending —
+ * since target kWh and insolation are constant across tiers, total panel
+ * cost is proportional to $/W, so this ordering carries through to the
+ * full system cost. Then take the cheapest, the median, and the priciest.
+ *
+ * Earlier heuristic (cheapest / highest-rated / highest-efficiency) could
+ * pick a premium-brand monocrystalline as "balanced" that actually cost
+ * more than the bifacial picked as "premium" — confusing for users.
+ */
+function pickPanelsByTier(country: RegionKey): Record<BudgetTier, SolarPanel | null> {
+  const inRegion = PANELS.filter((p) => p.availableRegions.includes(country));
+  const pool = inRegion.length > 0 ? inRegion : [...PANELS];
 
-  const inRegion = (p: SolarPanel) => p.availableRegions.includes(country);
-  const byTech = (p: SolarPanel) => p.technology === tech;
-
-  // Exact tech + region match
-  let candidates = PANELS.filter((p) => byTech(p) && inRegion(p));
-
-  // Fallback: any tech in region
-  if (candidates.length === 0) candidates = PANELS.filter(inRegion);
-
-  // Fallback: global
-  if (candidates.length === 0) candidates = [...PANELS];
-
-  if (candidates.length === 0) return null;
-
-  // Budget → cheapest. Premium → highest efficiency. Balanced → highest rating.
-  if (tier === "budget") {
-    candidates.sort((a, b) => a.price - b.price);
-  } else if (tier === "premium") {
-    candidates.sort((a, b) => b.efficiency - a.efficiency);
-  } else {
-    candidates.sort((a, b) => b.rating - a.rating);
+  if (pool.length === 0) {
+    return { budget: null, balanced: null, premium: null };
   }
 
-  return candidates[0];
+  const ppw = (p: SolarPanel) => p.price / p.wattage;
+  const sorted = [...pool].sort((a, b) => ppw(a) - ppw(b) || b.rating - a.rating);
+
+  if (sorted.length === 1) {
+    return { budget: sorted[0], balanced: sorted[0], premium: sorted[0] };
+  }
+  if (sorted.length === 2) {
+    return { budget: sorted[0], balanced: sorted[0], premium: sorted[1] };
+  }
+
+  return {
+    budget: sorted[0],
+    balanced: sorted[Math.floor(sorted.length / 2)],
+    premium: sorted[sorted.length - 1],
+  };
 }
 
 function pickInverter(
@@ -134,10 +132,12 @@ export function buildSolarBundles(args: BuildBundlesArgs): SolarBundle[] {
       ? sizeBattery(profile.dailyKwh, prefs.backupDays, battery)
       : 0;
 
+  const tierPanels = pickPanelsByTier(country);
+
   const bundles: SolarBundle[] = [];
 
   for (const tier of tiers) {
-    const panel = pickPanelForTier(tier, country);
+    const panel = tierPanels[tier];
     if (!panel) continue;
 
     const sizing = sizeSolarArray({
